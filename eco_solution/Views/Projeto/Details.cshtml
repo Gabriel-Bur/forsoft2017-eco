@@ -1,0 +1,61 @@
+﻿@model eco_solution.ModelView.ModelViewProjeto
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+
+<div class="row mb-5 mt-5 col-12">
+    <div class="col"></div>
+    <div class="container  col-12 col-md-10 col-lg-8 col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="text-center">@Html.DisplayFor(model => model.Nome) </h1>
+            </div>
+
+            <div class="card-body">
+
+
+                <div class="card">
+                    <a>
+                        <img class="card-img-top" src="@Html.DisplayFor(model => model.Imagem)" alt="Uma imagem representando coisas inovadoras">
+                    </a>
+                </div>
+
+                <hr>
+
+                <h4 class="card-title text-left">Responsável pelo projeto</h4>
+
+                <div class="media text-muted pt-3">
+                    <img alt="" class="mr-2 rounded" style="width: 32px; height: 32px;" src="@Html.DisplayFor(model => model.Imagem)" data-holder-rendered="true">
+                    <div class="media-body pb-3 mb-0 small lh-125">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <strong class="text-gray-dark">@Html.DisplayFor(model => model.PessoaNome)</strong>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <h5 class="display-4">Descrição</h5>
+                <p class="card-text text-right">
+                    @Html.DisplayFor(model => model.Descricao)
+                </p>
+                <hr />
+
+                <h5 class="display-4">Avaliações</h5>
+
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+
+@*
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+*@
+
