@@ -23,49 +23,90 @@ namespace eco_solution.Controllers
         }
 
         // GET: Login/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Perfil(int id)
         {
-            return View();
+            ModelViewPessoa pessoa = new ModelViewPessoa();
+
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa where IDPessoa = {0}",id), c.con);
+            c.rd = c.query.ExecuteReader();
+
+            while (c.rd.Read())
+            {
+
+
+                pessoa.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
+                pessoa.Telefone = c.rd["Telefone"].ToString();
+                pessoa.Nome = c.rd["Nome"].ToString();
+                pessoa.Imagem = c.rd["Imagem"].ToString();
+                pessoa.Descricao = c.rd["Descricao"].ToString();
+
+            }
+
+
+            return View(pessoa);
         }
 
 
 
         // POST: Login/Create
-        public ActionResult Logar(FormCollection usuario)
+        public ActionResult Logar(ModelViewUsuario usuario)
         {
-            c = new Conexao();
-
-            string email = Convert.ToString(usuario["Email"]);
-            string senha = Convert.ToString(usuario["Senha"]);
-
-            //MySqlParameter param = new MySqlParameter();
-            //param.ParameterName = "@Email";
-            //param.Value = email;
-
-
-
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand("", c.con);
-            c.query.CommandText = String.Format("SELECT * FROM usuario where Email={0}", email);
-            c.rd = c.query.ExecuteReader();
-
-
-            while (c.rd.Read())
+            if (ModelState.IsValid)
             {
-                ModelViewUsuario user = new ModelViewUsuario();
-                user.Email = c.rd["Email"].ToString();
-                user.Senha = c.rd["Senha"].ToString();
+
+                c = new Conexao();
+
+                string email = Convert.ToString(usuario.Email);
+                string senha = Convert.ToString(usuario.Senha);
+
+
+                c.con.Open();
+                c.query = new MySqlCommand("SELECT * FROM usuario", c.con);
+                c.rd = c.query.ExecuteReader();
+
+
+                while (c.rd.Read())
+                {
+
+                    string e = c.rd["Email"].ToString();
+                    string s = c.rd["Senha"].ToString();
+
+                    if (e == email)
+                    {
+                        if (s == senha)
+                        {
+
+                            HttpContext.Session["auth"] = true;
+                            HttpContext.Session["id"] = c.rd["IDUsuario"];
+                            return RedirectToAction("Index", "Home");
+
+
+                        }
+                        else
+                        {
+                        }
+                    }
+                    else
+                    {
+                    }
+                }
+
+                c.con.Close();
 
             }
-
-            c.con.Clone();
-
-            return View();
+            return View("Index");
 
         }
 
 
+        public ActionResult Sair()
+        {
+            HttpContext.Session["auth"] = null;
+
+            return RedirectToAction("Index", "Home");
+        }
 
 
         // GET: Login/Create

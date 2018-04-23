@@ -44,18 +44,29 @@
                 <hr />
 
                 <h5 class="display-4">Avaliações</h5>
-
+                <div class="list-group">
+                    @foreach (var item in Model.Avaliacoes)
+                    {
+                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1"></h5>
+                                <small>Nota: @Html.DisplayFor(modelItem => item.Nota)</small>
+                            </div>
+                            <p class="mb-1">@Html.DisplayFor(modelItem => item.Descricao)</p>
+                        </a>
+                    }
+                </div>
             </div>
         </div>
     </div>
     <div class="col"></div>
-</div>
 
 
-@*
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-*@
+
+    @*
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    *@
 

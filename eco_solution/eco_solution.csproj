@@ -167,6 +167,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ModelView\ModelViewAvaliacao.cs" />
+    <Compile Include="ModelView\ModelViewPessoa.cs" />
     <Compile Include="ModelView\ModelViewPessoaFisica.cs" />
     <Compile Include="ModelView\ModelViewPessoaJurifica.cs" />
     <Compile Include="ModelView\ModelViewProjeto.cs" />
@@ -183,6 +185,12 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\PessoaFisica\Details.cshtml" />
+    <Content Include="Views\PessoaJuridica\Details.cshtml" />
+    <Content Include="Views\Shared\_header.cshtml" />
+    <Content Include="Views\Shared\_footer.cshtml" />
+    <Content Include="Views\Shared\_headerlogado.cshtml" />
+    <Content Include="Views\Login\Perfil.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

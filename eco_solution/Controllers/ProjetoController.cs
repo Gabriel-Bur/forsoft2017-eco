@@ -45,8 +45,11 @@ namespace eco_solution.Controllers
         public ActionResult Details(int id)
         {
             ModelViewProjeto project = new ModelViewProjeto();
-            //Recupera o projeto
             c = new Conexao();
+
+
+
+            //Recupera o projeto
             c.con.Open();
             c.query = new MySqlCommand(String.Format("SELECT * FROM projeto where IDProjeto = {0}",id), c.con);
             c.rd = c.query.ExecuteReader();
@@ -60,6 +63,7 @@ namespace eco_solution.Controllers
             }
             c.con.Close();
 
+
             //recupera a pessoa ligada ao projeto
             c.con.Open();
             c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa where IDPessoa = {0}", project.IDPessoa), c.con);
@@ -71,6 +75,36 @@ namespace eco_solution.Controllers
                 project.PessoaImagem = c.rd["Imagem"].ToString();
             }
             c.con.Close();
+
+
+
+            //recupera as avaliações do projeto
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM avaliacao where IDProjeto = {0}", project.IDProjeto), c.con);
+            c.rd = c.query.ExecuteReader();
+            while (c.rd.Read())
+            {
+                ModelViewAvaliacao avaliacao = new ModelViewAvaliacao();
+
+                avaliacao.IDAvaliacao = Convert.ToInt32(c.rd["IDAvaliacao"].ToString());
+                avaliacao.IDProjeto = Convert.ToInt32(project.IDProjeto.ToString());
+                avaliacao.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
+                avaliacao.Nota = Convert.ToInt32(c.rd["Nota"].ToString());
+                avaliacao.Descricao = c.rd["Descricao"].ToString();
+
+
+
+
+
+
+
+                project.Avaliacoes.Add(avaliacao);
+
+
+            }
+            c.con.Close();
+
+
 
 
 

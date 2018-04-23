@@ -36,7 +36,7 @@ namespace eco_solution.Controllers
 
                 lista.Add(person);
             }
-            c.con.Clone();
+            c.con.Close();
 
 
             return View(lista);
@@ -45,7 +45,42 @@ namespace eco_solution.Controllers
         // GET: PessoaFisica/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            ModelViewPessoa person = new ModelViewPessoa();
+
+
+
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM usuario where IDPessoa = {0}", id), c.con);
+            c.rd = c.query.ExecuteReader();
+
+            while (c.rd.Read())
+            {
+
+                person.Email = c.rd["Email"].ToString();
+
+            }
+            c.con.Close();
+
+
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa where IDPessoa = {0}", id), c.con);
+            c.rd = c.query.ExecuteReader();
+
+            while (c.rd.Read())
+            {
+
+                person.Nome = c.rd["Nome"].ToString();
+                person.Telefone = c.rd["Telefone"].ToString();
+                person.Descricao = c.rd["Descricao"].ToString();
+                person.Imagem = c.rd["Imagem"].ToString();
+
+            }
+            c.con.Close();
+
+
+            return View(person);
         }
 
         // GET: PessoaFisica/Create

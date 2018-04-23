@@ -34,7 +34,7 @@
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nome)</h5>
                         <p class="card-text">@Html.DisplayFor(modelItem => item.Descricao)</p>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Detalhes</button>
+                        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Details","PessoaFisica",new { id = item.IDPessoaFisica })'">Detalhes</button>
                     </div>
                 </div>
             </div>
