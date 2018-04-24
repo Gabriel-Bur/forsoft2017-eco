@@ -69,15 +69,15 @@ namespace eco_solution.Controllers
 
         // POST: Login
         [HttpPost]
-        public ActionResult Index(ModelViewPessoa pessoa)
+        public ActionResult Index(ModelViewLogin user)
         {
             if (ModelState.IsValid)
             {
 
                 c = new Conexao();
 
-                string email = Convert.ToString(pessoa.Email);
-                string senha = Convert.ToString(pessoa.Senha);
+                string email = Convert.ToString(user.Email);
+                string senha = Convert.ToString(user.Senha);
 
 
                 c.con.Open();

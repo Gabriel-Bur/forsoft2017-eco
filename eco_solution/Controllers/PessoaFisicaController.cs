@@ -95,6 +95,37 @@ namespace eco_solution.Controllers
             if (ModelState.IsValid)
             {
 
+
+                c = new Conexao();
+                c.con.Open();
+                c.query = c.con.CreateCommand();
+                c.query.CommandText = "INSERT INTO pessoa (Email,Senha,Telefone,Nome,Descricao,Imagem) VALUES (@email,@senha,@telefone,@nome,@descricao,@imagem)";
+                c.query.Parameters.AddWithValue("@email", pf.Pessoa.Email);
+                c.query.Parameters.AddWithValue("@senha", pf.Pessoa.Senha);
+                c.query.Parameters.AddWithValue("@nome", pf.Pessoa.Nome);
+                c.query.Parameters.AddWithValue("@telefone", pf.Pessoa.Telefone);
+                c.query.Parameters.AddWithValue("@descricao", pf.Pessoa.Descricao);
+                c.query.Parameters.AddWithValue("@imagem", pf.Pessoa.Imagem);
+                c.query.ExecuteNonQuery();
+
+
+                //pega o id da pessoa que foi inserida e atribui à pessoafisica
+                pf.Pessoa.IDPessoa = Convert.ToInt32(c.query.LastInsertedId);
+                c.con.Close();
+
+
+
+                c.con.Open();
+                c.query.CommandText = "INSERT INTO pessoafisica (IDPessoaFisica,RG,CPF) VALUES (@idpessoafisica, @rg, @cpf)";
+                c.query.Parameters.AddWithValue("@idpessoafisica", pf.Pessoa.IDPessoa);
+                c.query.Parameters.AddWithValue("@rg", pf.RG);
+                c.query.Parameters.AddWithValue("@cpf", pf.CPF);
+                c.query.ExecuteNonQuery();
+
+                c.con.Close();
+
+
+                return RedirectToAction("Index","Home");
             }
 
             return View();

@@ -16,7 +16,7 @@ namespace eco_solution.DAO
 
         public Conexao()
         {
-            con = new MySqlConnection("server=localhost;port=3306;database=ecossistema;uid=root;password=root;SslMode=none");
+            con = new MySqlConnection("server=localhost;port=3306;database=ecossistema;uid=root;password=root;SslMode=none;Allow User Variables=True");
         }
 
 
