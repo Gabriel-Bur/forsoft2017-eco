@@ -10,16 +10,22 @@ namespace eco_solution.ModelView
         /// <summary>
         /// Avaliação
         /// </summary>
+        /// 
+
+
+        public ModelViewAvaliacao()
+        {
+            this.Pessoa = new ModelViewPessoa();
+        }
+
 
         public int IDAvaliacao { get; set; }
-
-        public int IDPessoa { get; set; }
 
         public int IDProjeto { get; set; }
 
         public int Nota { get; set; }
 
-        public string Descricao { get; set; }
+        public string Comentario { get; set; }
 
         public ModelViewPessoa Pessoa { get; set; }
 

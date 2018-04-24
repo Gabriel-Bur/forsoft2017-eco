@@ -147,8 +147,6 @@
     <Content Include="Web.config" />
     <Content Include="Views\Projeto\Index.cshtml" />
     <Content Include="Views\PessoaFisica\Index.cshtml" />
-    <Content Include="Views\PessoaJuridica\Index.cshtml" />
-    <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Projeto\Details.cshtml" />
     <Content Include="Views\Sobre\Index.cshtml" />
     <Content Include="Views\Contato\Faq.cshtml" />
@@ -159,6 +157,7 @@
     <Compile Include="Controllers\ContatoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MapaController.cs" />
     <Compile Include="Controllers\PessoaFisicaController.cs" />
     <Compile Include="Controllers\PessoaJuridicaController.cs" />
     <Compile Include="Controllers\ProjetoController.cs" />
@@ -170,9 +169,8 @@
     <Compile Include="ModelView\ModelViewAvaliacao.cs" />
     <Compile Include="ModelView\ModelViewPessoa.cs" />
     <Compile Include="ModelView\ModelViewPessoaFisica.cs" />
-    <Compile Include="ModelView\ModelViewPessoaJurifica.cs" />
+    <Compile Include="ModelView\ModelViewPessoaJuridica.cs" />
     <Compile Include="ModelView\ModelViewProjeto.cs" />
-    <Compile Include="ModelView\ModelViewUsuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -185,12 +183,17 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\PessoaFisica\Details.cshtml" />
-    <Content Include="Views\PessoaJuridica\Details.cshtml" />
     <Content Include="Views\Shared\_header.cshtml" />
     <Content Include="Views\Shared\_footer.cshtml" />
     <Content Include="Views\Shared\_headerlogado.cshtml" />
     <Content Include="Views\Login\Perfil.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\PessoaJuridica\Index.cshtml" />
+    <Content Include="Views\PessoaJuridica\Details.cshtml" />
+    <Content Include="Views\PessoaFisica\Details.cshtml" />
+    <Content Include="Views\Mapa\Index.cshtml" />
+    <Content Include="Views\PessoaFisica\Create.cshtml" />
+    <Content Include="Views\PessoaJuridica\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

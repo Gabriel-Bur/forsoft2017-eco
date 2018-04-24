@@ -11,6 +11,7 @@ namespace eco_solution.ModelView
 
         public ModelViewProjeto() {
             this.Avaliacoes = new List<ModelViewAvaliacao>();
+            this.Pessoa = new ModelViewPessoa();
         }
 
 
@@ -19,22 +20,20 @@ namespace eco_solution.ModelView
         /// </summary>
         public int IDProjeto { get; set; }
 
+        public ModelViewPessoa Pessoa { get; set; }
+
         public string Nome { get; set; }
 
         public string Descricao { get; set; }
 
         public string Imagem { get; set; }
 
+
         /// <summary>
         /// Pessoa
         /// </summary>
-        public int IDPessoa { get; set; }
 
-        public string PessoaTelefone{ get; set; }
 
-        public string PessoaNome { get; set; }
-
-        public string PessoaImagem { get; set; }
 
 
         //Lista de avaliações de um projeto

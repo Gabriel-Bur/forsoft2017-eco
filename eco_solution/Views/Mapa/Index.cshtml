@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container">
+    <div class="row col-12">
+        <div class="col-2">
+        </div>
+        <div class="col-12 col-lg-8 col-sm-12 col-md-12">
+            <div class="container mt-5 mb-5">
+
+                <ul class="list-group ml-auto mr-auto text-center">
+                        <li class="list-group-item active ">Mapa do Site</li>
+                    <a href="@Url.Action("Index","Home")">
+                        <li class="list-group-item ">Página Inicial</li>
+                    </a>
+                    <a href="@Url.Action("Index","Sobre")">
+                        <li class="list-group-item ">Sobre</li>
+                    </a>
+                    <a href="@Url.Action("Index","Projeto")">
+                        <li class="list-group-item ">Projetos</li>
+                    </a>
+                    <a href="@Url.Action("Index","PessoaFisica")">
+                        <li class="list-group-item ">Pessoas Inovadoras</li>
+                    </a>
+                    <a href="@Url.Action("Index","PessoaJuridica")">
+                        <li class="list-group-item ">Empresas Inovadoras</li>
+                    </a>
+                    <a href="@Url.Action("Faq","Contato")">
+                        <li class="list-group-item  ">Perguntas Frequentes</li>
+                    </a>
+                    <a href="@Url.Action("Ajuda","Contato")">
+                        <li class="list-group-item  ">Ajuda</li>
+                    </a>
+                    <a href="eco_cadastroPF.aspx">
+                        <li class="list-group-item  ">Cadastro de Pessoa Inovadora</li>
+                    </a>
+                    <a href="eco_cadastroPJ.aspx">
+                        <li class="list-group-item  ">Cadastro de Empresa Inovadora</li>
+                    </a>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+    </div>
+</div>
+

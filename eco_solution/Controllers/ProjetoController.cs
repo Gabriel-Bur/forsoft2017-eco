@@ -44,10 +44,9 @@ namespace eco_solution.Controllers
         // GET: Projeto/Details/5
         public ActionResult Details(int id)
         {
+            
             ModelViewProjeto project = new ModelViewProjeto();
             c = new Conexao();
-
-
 
             //Recupera o projeto
             c.con.Open();
@@ -56,7 +55,7 @@ namespace eco_solution.Controllers
             while (c.rd.Read())
             {
                 project.IDProjeto = Convert.ToInt32(c.rd["IDProjeto"].ToString());
-                project.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
+                project.Pessoa.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
                 project.Nome = c.rd["Nome"].ToString();
                 project.Descricao = c.rd["Descricao"].ToString();
                 project.Imagem = c.rd["Imagem"].ToString();
@@ -64,47 +63,46 @@ namespace eco_solution.Controllers
             c.con.Close();
 
 
-            //recupera a pessoa ligada ao projeto
+            //recupera a pessoa criadora do projeto
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa where IDPessoa = {0}", project.IDPessoa), c.con);
+            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa where IDPessoa = {0}", project.Pessoa.IDPessoa), c.con);
             c.rd = c.query.ExecuteReader();
             while (c.rd.Read())
             {
-                project.PessoaNome = c.rd["Nome"].ToString();
-                project.PessoaTelefone = c.rd["Telefone"].ToString();
-                project.PessoaImagem = c.rd["Imagem"].ToString();
+                project.Pessoa.Nome = c.rd["Nome"].ToString();
+                project.Pessoa.Telefone = c.rd["Telefone"].ToString();
+                project.Pessoa.Imagem = c.rd["Imagem"].ToString();
+
             }
             c.con.Close();
 
 
 
-            //recupera as avaliações do projeto
+            //recupera a pessoa e sua avaliação ligada ao projeto
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM avaliacao where IDProjeto = {0}", project.IDProjeto), c.con);
+            c.query = new MySqlCommand(String.Format("select * from avaliacao inner join pessoa on avaliacao.IDPessoa = pessoa.IDPessoa where IDProjeto = {0}", id, project.IDProjeto), c.con);
+
+
             c.rd = c.query.ExecuteReader();
             while (c.rd.Read())
             {
+
+                //Recupera a lista de avaliações do projeto escolhido
                 ModelViewAvaliacao avaliacao = new ModelViewAvaliacao();
 
                 avaliacao.IDAvaliacao = Convert.ToInt32(c.rd["IDAvaliacao"].ToString());
-                avaliacao.IDProjeto = Convert.ToInt32(project.IDProjeto.ToString());
-                avaliacao.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
+                avaliacao.IDProjeto = Convert.ToInt32(c.rd["IDProjeto"].ToString());
+                avaliacao.Pessoa.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
+                avaliacao.Pessoa.Nome = c.rd["Nome"].ToString();
+                avaliacao.Pessoa.Imagem = c.rd["Imagem"].ToString();
                 avaliacao.Nota = Convert.ToInt32(c.rd["Nota"].ToString());
-                avaliacao.Descricao = c.rd["Descricao"].ToString();
-
-
-
-
-
-
+                avaliacao.Comentario = c.rd["Comentario"].ToString();
 
                 project.Avaliacoes.Add(avaliacao);
 
 
             }
             c.con.Close();
-
-
 
 
 

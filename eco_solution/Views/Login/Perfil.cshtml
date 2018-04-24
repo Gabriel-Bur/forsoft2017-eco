@@ -17,23 +17,21 @@
             <div class="card-body text-center">
                 <div class="col-12">
                     <img src="@Html.DisplayFor(model => model.Imagem)" alt="Foto" height="200" width="200"><br>
-                    <a href="eco_editarPerfil.aspx">Editar perfil</a><br>
-                    <a href="eco_alterarContaPF.aspx">Editar Conta</a>
+                    <a href="@Url.Action("Edit", "Login", new { id = Session["id"] })">Editar Perfil</a><br>
+                    <a href=@Url.Action("Edit", "Login", new { id = Session["id"] })">Editar Conta</a>
                 </div>
                 <hr>
-                <b>
-                    Nome:
-                </b>
-                <br>
-                <p>@Html.DisplayFor(model => model.Nome)</p>
-                <b>
-                    Contato:
-                </b>
-                <p>@Html.DisplayFor(model => model.Telefone)</p>
+
+
+                <label>Nome:</label>
+                <h4>@Html.DisplayFor(model => model.Nome)</h4>
+
+                <label>Contato:</label>
+                <h4>@Html.DisplayFor(model => model.Telefone)</h4>
 
                 <hr>
                 <h6 class="display-4">Descrição</h6>
-                <p class="card-text text-left">
+                <p class="card-text text-center">
                     @Html.DisplayFor(model => model.Descricao)
                 </p>
                 <hr>
@@ -41,44 +39,29 @@
                 <table class="table">
                     <thead class="thead-dark">
                         <tr>
-                            <th scope="col">Seleção</th>
-                            <th scope="col">Nº</th>
-                            <th scope="col">Nome do projeto</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">
-                                <input type="radio">
-                            </th>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <input type="radio">
-                            </th>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <input type="radio">
-                            </th>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                        </tr>
+                        @foreach (var item in Model.Projetos)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(i => item.IDProjeto)</td>
+                                <td>@Html.DisplayFor(i => item.Nome)</td>
+                                <td>
+                                    @Html.ActionLink("Editar", "Edit", "Projeto", new { id = item.IDProjeto }) |
+                                    @Html.ActionLink("Deletar", "Delete", "Projeto", new { id = item.IDProjeto })
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
-
                 <div class="text-center">
                     <a href="eco_adicionarInovacao.aspx">
                         <button class="btn btn-primary btn-sx" type="button">Adicionar</button>
                     </a>
-                    <a href="eco_editarInovacao.aspx">
-                        <button class="btn btn-primary btn-sx" type="button">Editar</button>
-                    </a>
-                    <button class="btn btn-primary btn-sx" type="button">Remover</button>
                 </div>
             </div>
         </div>

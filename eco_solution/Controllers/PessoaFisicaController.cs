@@ -21,20 +21,27 @@ namespace eco_solution.Controllers
 
             c = new Conexao();
             c.con.Open();
-            c.query = new MySqlCommand("SELECT * FROM ecossistema.pessoa p " +
-                                        "inner join ecossistema.pessoafisica pf " +
-                                        "on p.IDPessoa = pf.IDPessoaFisica ",c.con);
+            c.query = new MySqlCommand("SELECT * FROM pessoa inner join pessoafisica on IDPessoa = IDPessoaFisica", c.con);
             c.rd = c.query.ExecuteReader();
 
             while (c.rd.Read())
             {
-                ModelViewPessoaFisica person = new ModelViewPessoaFisica();
-                person.IDPessoaFisica = Convert.ToInt32(c.rd["IDPessoaFisica"].ToString());
-                person.Nome = c.rd["Nome"].ToString();
-                person.Descricao = c.rd["Descricao"].ToString();
-                person.Imagem = c.rd["Imagem"].ToString();
+                ModelViewPessoaFisica pf = new ModelViewPessoaFisica();
+                ModelViewPessoa person = new ModelViewPessoa();
 
-                lista.Add(person);
+
+                pf.IDPessoaFisica = Convert.ToInt32(c.rd["IDPessoaFisica"].ToString());
+                pf.CPF = c.rd["CPF"].ToString();
+                pf.RG = c.rd["RG"].ToString();
+
+                person.Nome = c.rd["Nome"].ToString();
+                person.Imagem = c.rd["Imagem"].ToString();
+                person.Descricao = c.rd["Descricao"].ToString();
+                person.Telefone = c.rd["Telefone"].ToString();
+
+                pf.Pessoa = person;
+
+                lista.Add(pf);
             }
             c.con.Close();
 
@@ -45,42 +52,34 @@ namespace eco_solution.Controllers
         // GET: PessoaFisica/Details/5
         public ActionResult Details(int id)
         {
+            ModelViewPessoaFisica pf = new ModelViewPessoaFisica();
             ModelViewPessoa person = new ModelViewPessoa();
 
-
-
             c = new Conexao();
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM usuario where IDPessoa = {0}", id), c.con);
+            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa inner join pessoafisica on IDPessoa = IDPessoaFisica where IDPessoa = {0}", id), c.con);
             c.rd = c.query.ExecuteReader();
 
             while (c.rd.Read())
             {
-
                 person.Email = c.rd["Email"].ToString();
-
-            }
-            c.con.Close();
-
-
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa where IDPessoa = {0}", id), c.con);
-            c.rd = c.query.ExecuteReader();
-
-            while (c.rd.Read())
-            {
-
                 person.Nome = c.rd["Nome"].ToString();
                 person.Telefone = c.rd["Telefone"].ToString();
                 person.Descricao = c.rd["Descricao"].ToString();
                 person.Imagem = c.rd["Imagem"].ToString();
 
+                pf.RG = c.rd["RG"].ToString();
+                pf.CPF = c.rd["CPF"].ToString();
+
+
+                pf.Pessoa = person;
+
+
+
             }
             c.con.Close();
 
-
-            return View(person);
+            return View(pf);
         }
 
         // GET: PessoaFisica/Create
@@ -91,18 +90,14 @@ namespace eco_solution.Controllers
 
         // POST: PessoaFisica/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(ModelViewPessoaFisica pf)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
 
-                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View();
         }
 
         // GET: PessoaFisica/Edit/5

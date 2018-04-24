@@ -1,100 +1,28 @@
-﻿@model eco_solution.ModelView.ModelViewPessoa
+﻿@model eco_solution.ModelView.ModelViewPessoaFisica
 
 @{
     ViewBag.Title = "Details";
 }
-
 
 <div class="row col-12 mb-5 mt-5">
     <div class="col"></div>
     <div class="container  col-12 col-md-10 col-lg-8 col-xl-6">
         <div class="card">
             <div class="card-header">
-                <h1 class="text-center">@Html.DisplayFor(model => model.Nome)</h1>
+                <h1 class="text-center">@Html.DisplayFor(model => model.Pessoa.Nome)</h1>
             </div>
             <div class="card-body mt-5 mb-5">
                 <h5 class="display-5">
                     Descrição:
                 </h5>
-                <p>@Html.DisplayFor(model => model.Descricao)</p>
+                <p>@Html.DisplayFor(model => model.Pessoa.Descricao)</p>
                 <h5 class="display-5">
                     Contato:
                 </h5>
-                <p>@Html.DisplayFor(model => model.Telefone)</p>
-                <p>@Html.DisplayFor(model => model.Email)</p>
+                <p>@Html.DisplayFor(model => model.Pessoa.Telefone)</p>
+                <p>@Html.DisplayFor(model => model.Pessoa.Email)</p>
             </div>
         </div>
     </div>
     <div class="col"></div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-@*
-    <div>
-        <h4>ModelViewPessoa</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.IDPessoa)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.IDPessoa)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Nome)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Nome)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Telefone)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Telefone)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Descricao)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Imagem)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Imagem)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Email)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Email)
-            </dd>
-
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-*@

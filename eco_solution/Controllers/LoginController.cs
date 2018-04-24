@@ -15,17 +15,18 @@ namespace eco_solution.Controllers
 
 
         // GET: Login
+        [HttpGet]
         public ActionResult Index()
         {
-
-
             return View();
         }
 
         // GET: Login/Details/5
+        [HttpGet]
         public ActionResult Perfil(int id)
         {
             ModelViewPessoa pessoa = new ModelViewPessoa();
+
 
             c = new Conexao();
             c.con.Open();
@@ -45,44 +46,55 @@ namespace eco_solution.Controllers
             }
 
 
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM projeto where IDPessoa = {0}", id), c.con);
+            c.rd = c.query.ExecuteReader();
+
+            while (c.rd.Read())
+            {
+
+                ModelViewProjeto projeto = new ModelViewProjeto();
+
+                projeto.IDProjeto = Convert.ToInt32(c.rd["IDProjeto"].ToString());
+                projeto.Nome = c.rd["Nome"].ToString();
+
+                pessoa.Projetos.Add(projeto);
+            }
+
             return View(pessoa);
         }
 
 
 
-        // POST: Login/Create
-        public ActionResult Logar(ModelViewUsuario usuario)
+        // POST: Login
+        [HttpPost]
+        public ActionResult Index(ModelViewPessoa pessoa)
         {
             if (ModelState.IsValid)
             {
 
                 c = new Conexao();
 
-                string email = Convert.ToString(usuario.Email);
-                string senha = Convert.ToString(usuario.Senha);
+                string email = Convert.ToString(pessoa.Email);
+                string senha = Convert.ToString(pessoa.Senha);
 
 
                 c.con.Open();
-                c.query = new MySqlCommand("SELECT * FROM usuario", c.con);
+                c.query = new MySqlCommand("SELECT * FROM pessoa", c.con);
                 c.rd = c.query.ExecuteReader();
-
 
                 while (c.rd.Read())
                 {
-
                     string e = c.rd["Email"].ToString();
                     string s = c.rd["Senha"].ToString();
-
                     if (e == email)
                     {
                         if (s == senha)
                         {
-
                             HttpContext.Session["auth"] = true;
-                            HttpContext.Session["id"] = c.rd["IDUsuario"];
+                            HttpContext.Session["id"] = c.rd["IDPessoa"];
                             return RedirectToAction("Index", "Home");
-
-
                         }
                         else
                         {
@@ -92,12 +104,9 @@ namespace eco_solution.Controllers
                     {
                     }
                 }
-
                 c.con.Close();
-
             }
-            return View("Index");
-
+            return View();
         }
 
 
@@ -117,7 +126,7 @@ namespace eco_solution.Controllers
 
         // POST: Login/Create
         [HttpPost]
-        public ActionResult Create(ModelViewUsuario usuario)
+        public ActionResult Create(ModelViewPessoa pessoa)
         {
             try
             {
@@ -132,9 +141,30 @@ namespace eco_solution.Controllers
         }
 
         // GET: Login/Edit/5
+        [HttpGet]
         public ActionResult Edit(int id)
         {
-            return View();
+            ModelViewPessoa pessoa = new ModelViewPessoa();
+
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa where IDPessoa = {0}", id), c.con);
+            c.rd = c.query.ExecuteReader();
+
+            while (c.rd.Read())
+            {
+
+
+                pessoa.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
+                pessoa.Telefone = c.rd["Telefone"].ToString();
+                pessoa.Nome = c.rd["Nome"].ToString();
+                pessoa.Imagem = c.rd["Imagem"].ToString();
+                pessoa.Descricao = c.rd["Descricao"].ToString();
+
+            }
+
+
+            return View(pessoa);
         }
 
         // POST: Login/Edit/5

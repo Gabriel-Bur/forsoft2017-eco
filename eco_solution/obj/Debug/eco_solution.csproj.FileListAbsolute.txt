@@ -61,4 +61,3 @@ C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\bin\pt-br\System.Web.Mvc.res
 C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\obj\Debug\eco_solution.csproj.CoreCompileInputs.cache
 C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\obj\Debug\eco_solution.dll
 C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\obj\Debug\eco_solution.pdb
-C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\obj\Debug\eco_solution.csprojResolveAssemblyReference.cache
