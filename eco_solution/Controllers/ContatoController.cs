@@ -14,6 +14,17 @@ namespace eco_solution.Controllers
             return View();
         }
 
+        public ActionResult Termos()
+        {
+            return View();
+        }
+
+        public ActionResult Privacidade()
+        {
+            return View();
+        }
+
+
         // GET: Ajuda
         public ActionResult Ajuda()
         {

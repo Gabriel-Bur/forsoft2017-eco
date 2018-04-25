@@ -3,6 +3,7 @@ using eco_solution.ModelView;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -90,7 +91,7 @@ namespace eco_solution.Controllers
 
             return View(pj);
         }
-    
+
 
         // GET: PessoaJuridica/Create
         public ActionResult Create()
@@ -104,47 +105,69 @@ namespace eco_solution.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                c = new Conexao();
-                c.con.Open();
-                c.query = c.con.CreateCommand();
-                c.query.CommandText = "INSERT INTO pessoa (Email,Senha,Telefone,Nome,Descricao,Imagem) VALUES (@email,@senha,@telefone,@nome,@descricao,@imagem)";
-                c.query.Parameters.AddWithValue("@email", pj.Pessoa.Email);
-                c.query.Parameters.AddWithValue("@senha", pj.Pessoa.Senha);
-                c.query.Parameters.AddWithValue("@nome", pj.Pessoa.Nome);
-                c.query.Parameters.AddWithValue("@telefone", pj.Pessoa.Telefone);
-                c.query.Parameters.AddWithValue("@descricao", pj.Pessoa.Descricao);
-                c.query.Parameters.AddWithValue("@imagem", pj.Pessoa.Imagem);
-                c.query.ExecuteNonQuery();
+                try
+                {
+                    //pega o objeto imagem do input
+                    HttpPostedFileBase foto = Request.Files["Pessoa.Imagem"];
 
 
-                //pega o id da pessoa que foi inserida e atribui à pessoajuridica
-                pj.Pessoa.IDPessoa = Convert.ToInt32(c.query.LastInsertedId);
-                c.con.Close();
+                    // pega o nome do arquivo
+                    var nomeArquivo = Path.GetFileName(foto.FileName);
+                    //cria o caminho final da imagem
+                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/perfiljuridico/")), nomeArquivo);
+                    //salva a foto no caminho
+                    foto.SaveAs(caminho);
+                    //imagem da pessoafisica criado recebe o caminho da imagem salva
+                    pj.Pessoa.Imagem = Path.Combine(Url.Content("/assets/perfiljuridico/"), nomeArquivo);
 
 
 
-                c.con.Open();
-                c.query.CommandText = "INSERT INTO pessoajuridica " +
-                                        "(IDPessoaJuridica,RazaoSocial,CNPJ,Logradouro,CEP,Cidade,Bairro,Numero,AreaDeAtuacao,Complemento) " +
-                                        "VALUES (@idpessoajuridica, @razaosocial, @cnpj,@logradouro,@cep,@cidade,@bairro,@numero,@areadeatuacao,@complemento)";     
 
-                c.query.Parameters.AddWithValue("@idpessoajuridica", pj.Pessoa.IDPessoa);
-                c.query.Parameters.AddWithValue("@razaosocial", pj.RazaoSocial);
-                c.query.Parameters.AddWithValue("@cnpj", pj.CNPJ);
-                c.query.Parameters.AddWithValue("@logradouro", pj.Logradouro);
-                c.query.Parameters.AddWithValue("@cep", pj.CEP);
-                c.query.Parameters.AddWithValue("@cidade", pj.Cidade);
-                c.query.Parameters.AddWithValue("@bairro", pj.Bairro);
-                c.query.Parameters.AddWithValue("@numero", pj.Numero);
-                c.query.Parameters.AddWithValue("@areadeatuacao", pj.AreaDeAtuacao);
-                c.query.Parameters.AddWithValue("@complemento", pj.Complemento);
-                c.query.ExecuteNonQuery();
-
-                c.con.Close();
+                    c = new Conexao();
+                    c.con.Open();
+                    c.query = c.con.CreateCommand();
+                    c.query.CommandText = "INSERT INTO pessoa (Email,Senha,Telefone,Nome,Descricao,Imagem) VALUES (@email,@senha,@telefone,@nome,@descricao,@imagem)";
+                    c.query.Parameters.AddWithValue("@email", pj.Pessoa.Email);
+                    c.query.Parameters.AddWithValue("@senha", pj.Pessoa.Senha);
+                    c.query.Parameters.AddWithValue("@nome", pj.Pessoa.Nome);
+                    c.query.Parameters.AddWithValue("@telefone", pj.Pessoa.Telefone);
+                    c.query.Parameters.AddWithValue("@descricao", pj.Pessoa.Descricao);
+                    c.query.Parameters.AddWithValue("@imagem", pj.Pessoa.Imagem);
+                    c.query.ExecuteNonQuery();
 
 
-                return RedirectToAction("Index", "Home");
+                    //pega o id da pessoa que foi inserida e atribui à pessoajuridica
+                    pj.Pessoa.IDPessoa = Convert.ToInt32(c.query.LastInsertedId);
+                    c.con.Close();
+
+
+
+                    c.con.Open();
+                    c.query.CommandText = "INSERT INTO pessoajuridica " +
+                                            "(IDPessoaJuridica,RazaoSocial,CNPJ,Logradouro,CEP,Cidade,Bairro,Numero,AreaDeAtuacao,Complemento) " +
+                                            "VALUES (@idpessoajuridica, @razaosocial, @cnpj,@logradouro,@cep,@cidade,@bairro,@numero,@areadeatuacao,@complemento)";
+
+                    c.query.Parameters.AddWithValue("@idpessoajuridica", pj.Pessoa.IDPessoa);
+                    c.query.Parameters.AddWithValue("@razaosocial", pj.RazaoSocial);
+                    c.query.Parameters.AddWithValue("@cnpj", pj.CNPJ);
+                    c.query.Parameters.AddWithValue("@logradouro", pj.Logradouro);
+                    c.query.Parameters.AddWithValue("@cep", pj.CEP);
+                    c.query.Parameters.AddWithValue("@cidade", pj.Cidade);
+                    c.query.Parameters.AddWithValue("@bairro", pj.Bairro);
+                    c.query.Parameters.AddWithValue("@numero", pj.Numero);
+                    c.query.Parameters.AddWithValue("@areadeatuacao", pj.AreaDeAtuacao);
+                    c.query.Parameters.AddWithValue("@complemento", pj.Complemento);
+                    c.query.ExecuteNonQuery();
+
+                    c.con.Close();
+
+
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (Exception e)
+                {
+
+                }
             }
 
             return View();

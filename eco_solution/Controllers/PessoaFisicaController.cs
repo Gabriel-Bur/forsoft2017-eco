@@ -3,6 +3,7 @@ using eco_solution.ModelView;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -95,47 +96,70 @@ namespace eco_solution.Controllers
             if (ModelState.IsValid)
             {
 
-
-                c = new Conexao();
-                c.con.Open();
-                c.query = c.con.CreateCommand();
-                c.query.CommandText = "INSERT INTO pessoa (Email,Senha,Telefone,Nome,Descricao,Imagem) VALUES (@email,@senha,@telefone,@nome,@descricao,@imagem)";
-                c.query.Parameters.AddWithValue("@email", pf.Pessoa.Email);
-                c.query.Parameters.AddWithValue("@senha", pf.Pessoa.Senha);
-                c.query.Parameters.AddWithValue("@nome", pf.Pessoa.Nome);
-                c.query.Parameters.AddWithValue("@telefone", pf.Pessoa.Telefone);
-                c.query.Parameters.AddWithValue("@descricao", pf.Pessoa.Descricao);
-                c.query.Parameters.AddWithValue("@imagem", pf.Pessoa.Imagem);
-                c.query.ExecuteNonQuery();
+                try
+                {
+                    //pega o objeto imagem do input
+                    HttpPostedFileBase foto = Request.Files["Pessoa.Imagem"];
 
 
-                //pega o id da pessoa que foi inserida e atribui à pessoafisica
-                pf.Pessoa.IDPessoa = Convert.ToInt32(c.query.LastInsertedId);
-                c.con.Close();
+                    // pega o nome do arquivo
+                    var nomeArquivo = Path.GetFileName(foto.FileName);
+                    //cria o caminho final da imagem
+                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/perfilfisico/")), nomeArquivo);
+                    //salva a foto no caminho
+                    foto.SaveAs(caminho);
+                    //imagem da pessoafisica criado recebe o caminho da imagem salva
+                    pf.Pessoa.Imagem = Path.Combine(Url.Content("/assets/perfilfisico/"), nomeArquivo);
 
 
 
-                c.con.Open();
-                c.query.CommandText = "INSERT INTO pessoafisica (IDPessoaFisica,RG,CPF) VALUES (@idpessoafisica, @rg, @cpf)";
-                c.query.Parameters.AddWithValue("@idpessoafisica", pf.Pessoa.IDPessoa);
-                c.query.Parameters.AddWithValue("@rg", pf.RG);
-                c.query.Parameters.AddWithValue("@cpf", pf.CPF);
-                c.query.ExecuteNonQuery();
 
-                c.con.Close();
+                    c = new Conexao();
+                    c.con.Open();
+                    c.query = c.con.CreateCommand();
+                    c.query.CommandText = "INSERT INTO pessoa (Email,Senha,Telefone,Nome,Descricao,Imagem) VALUES (@email,@senha,@telefone,@nome,@descricao,@imagem)";
+                    c.query.Parameters.AddWithValue("@email", pf.Pessoa.Email);
+                    c.query.Parameters.AddWithValue("@senha", pf.Pessoa.Senha);
+                    c.query.Parameters.AddWithValue("@nome", pf.Pessoa.Nome);
+                    c.query.Parameters.AddWithValue("@telefone", pf.Pessoa.Telefone);
+                    c.query.Parameters.AddWithValue("@descricao", pf.Pessoa.Descricao);
+                    c.query.Parameters.AddWithValue("@imagem", pf.Pessoa.Imagem);
+                    c.query.ExecuteNonQuery();
 
 
-                return RedirectToAction("Index","Home");
+                    //pega o id da pessoa que foi inserida e atribui à pessoafisica
+                    pf.Pessoa.IDPessoa = Convert.ToInt32(c.query.LastInsertedId);
+                    c.con.Close();
+
+
+
+                    c.con.Open();
+                    c.query.CommandText = "INSERT INTO pessoafisica (IDPessoaFisica,RG,CPF) VALUES (@idpessoafisica, @rg, @cpf)";
+                    c.query.Parameters.AddWithValue("@idpessoafisica", pf.Pessoa.IDPessoa);
+                    c.query.Parameters.AddWithValue("@rg", pf.RG);
+                    c.query.Parameters.AddWithValue("@cpf", pf.CPF);
+                    c.query.ExecuteNonQuery();
+
+                    c.con.Close();
+
+
+                    return RedirectToAction("Index", "Home");
+
+                } catch (Exception e){
+                    return View();
+                }
+
+
             }
 
-            return View();
-        }
+                return View();
+            }
 
-        // GET: PessoaFisica/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+            // GET: PessoaFisica/Edit/5
+            public ActionResult Edit(int id)
+            {
+                return View();
+            }
 
         // POST: PessoaFisica/Edit/5
         [HttpPost]

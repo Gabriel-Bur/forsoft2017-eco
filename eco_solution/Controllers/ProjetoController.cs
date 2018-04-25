@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -22,7 +23,7 @@ namespace eco_solution.Controllers
 
             c = new Conexao();
             c.con.Open();
-            c.query = new MySqlCommand("SELECT * FROM projeto",c.con);
+            c.query = new MySqlCommand("SELECT * FROM projeto", c.con);
             c.rd = c.query.ExecuteReader();
 
             while (c.rd.Read())
@@ -44,13 +45,13 @@ namespace eco_solution.Controllers
         // GET: Projeto/Details/5
         public ActionResult Details(int id)
         {
-            
+
             ModelViewProjeto project = new ModelViewProjeto();
             c = new Conexao();
 
             //Recupera o projeto
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM projeto where IDProjeto = {0}",id), c.con);
+            c.query = new MySqlCommand(String.Format("SELECT * FROM projeto where IDProjeto = {0}", id), c.con);
             c.rd = c.query.ExecuteReader();
             while (c.rd.Read())
             {
@@ -118,18 +119,59 @@ namespace eco_solution.Controllers
 
         // POST: Projeto/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(ModelViewProjeto project)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                //se nao tiver logado
+                if (Session["id"].Equals(null))
+                {
 
-                return RedirectToAction("Index");
+                }
+                //se tiver logado
+                else
+                {
+                    //recupera o id do usuario 
+                    var idlogado = Session["id"];
+
+ 
+                    //pega o objeto imagem do input
+                    HttpPostedFileBase foto = Request.Files["Imagem"];
+
+                    // pega o nome do arquivo
+                    var nomeArquivo = Path.GetFileName(foto.FileName);
+                    //cria o caminho final da imagem
+                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/Projeto/")),nomeArquivo);
+                    //salva a foto no caminho
+                    foto.SaveAs(caminho);
+                    //imagem do projeto criado recebe o caminho da imagem salva
+                    project.Imagem = Path.Combine(Url.Content("/assets/Projeto/"), nomeArquivo);
+
+
+
+
+                    c = new Conexao();
+                    c.con.Open();
+                    c.query = c.con.CreateCommand();
+                    c.query.CommandText = "INSERT INTO projeto (IDPessoa,Nome,Descricao,Imagem) VALUES (@idpessoa,@nome,@descricao,@imagem)";
+
+                    c.query.Parameters.AddWithValue("@idpessoa", idlogado);
+                    c.query.Parameters.AddWithValue("@nome", project.Nome);
+                    c.query.Parameters.AddWithValue("@descricao", project.Descricao);
+                    c.query.Parameters.AddWithValue("@imagem", project.Imagem);
+
+
+
+                    c.query.ExecuteNonQuery();
+
+                    return RedirectToAction("Index", "Projeto");
+                }
+
+
             }
-            catch
-            {
-                return View();
-            }
+
+
+            return View();
         }
 
         // GET: Projeto/Edit/5

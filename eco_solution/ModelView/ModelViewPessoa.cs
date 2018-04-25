@@ -46,8 +46,7 @@ namespace eco_solution.ModelView
         [DataType(DataType.MultilineText)]
         public string Descricao { get; set; }
 
-        [Required(ErrorMessage = "Escolha uma imagem de perfil")]
-        [DataType(DataType.Upload)]
+        [Required(ErrorMessage = "Escolha uma imagem para seu perfil")]
         public string Imagem { get; set; }
 
         public List<ModelViewProjeto> Projetos { get; set; }

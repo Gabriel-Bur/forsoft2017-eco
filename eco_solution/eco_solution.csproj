@@ -194,6 +194,9 @@
     <Content Include="Views\PessoaFisica\Create.cshtml" />
     <Content Include="Views\PessoaJuridica\Create.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Contato\Termos.cshtml" />
+    <Content Include="Views\Contato\Privacidade.cshtml" />
+    <Content Include="Views\Projeto\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -203,6 +206,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="assets\perfilfisico\" />
+    <Folder Include="assets\perfiljuridico\" />
+    <Folder Include="assets\projeto\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>

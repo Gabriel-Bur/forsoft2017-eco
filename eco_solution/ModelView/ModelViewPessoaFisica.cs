@@ -13,8 +13,8 @@ namespace eco_solution.ModelView
         public ModelViewPessoa Pessoa { get; set; }
 
         [Required(ErrorMessage = "Digite seu RG")]
-        [StringLength(9, MinimumLength = 9, ErrorMessage = "CPF deve estar no formato: XXXXXXXXX")]
-        [RegularExpression(@"(^\d{2}\.?\d{3}\.?\d{3}-?\d{1}$)", ErrorMessage = "CPF deve estar no formato: XXXXXXXXX")]
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "RG deve estar no formato: XXXXXXXXX")]
+        [RegularExpression(@"(^\d{2}\.?\d{3}\.?\d{3}-?\d{1}$)", ErrorMessage = "RG deve estar no formato: XXXXXXXXX")]
 
         public string RG { get; set; }
 
