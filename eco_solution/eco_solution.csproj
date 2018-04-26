@@ -157,6 +157,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MapaController.cs" />
+    <Compile Include="Controllers\PerfilController.cs" />
     <Compile Include="Controllers\PessoaFisicaController.cs" />
     <Compile Include="Controllers\PessoaJuridicaController.cs" />
     <Compile Include="Controllers\ProjetoController.cs" />
@@ -186,7 +187,6 @@
     <Content Include="Views\Shared\_header.cshtml" />
     <Content Include="Views\Shared\_footer.cshtml" />
     <Content Include="Views\Shared\_headerlogado.cshtml" />
-    <Content Include="Views\Login\Perfil.cshtml" />
     <Content Include="Views\PessoaJuridica\Index.cshtml" />
     <Content Include="Views\PessoaJuridica\Details.cshtml" />
     <Content Include="Views\PessoaFisica\Details.cshtml" />
@@ -197,6 +197,8 @@
     <Content Include="Views\Contato\Termos.cshtml" />
     <Content Include="Views\Contato\Privacidade.cshtml" />
     <Content Include="Views\Projeto\Create.cshtml" />
+    <Content Include="Views\Perfil\Index.cshtml" />
+    <Content Include="Views\Perfil\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -206,8 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="assets\perfilfisico\" />
-    <Folder Include="assets\perfiljuridico\" />
+    <Folder Include="assets\perfil\" />
     <Folder Include="assets\projeto\" />
     <Folder Include="Models\" />
   </ItemGroup>

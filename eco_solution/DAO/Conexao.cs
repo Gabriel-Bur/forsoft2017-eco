@@ -16,7 +16,7 @@ namespace eco_solution.DAO
 
         public Conexao()
         {
-            con = new MySqlConnection("server=192.168.54.13;port=3306;database=Ecossistema;uid=forsoft;password=F0rs0ft;SslMode=none;Allow User Variables=True");
+            con = new MySqlConnection("server=192.168.0.45;port=3306;database=Ecossistema;uid=forsoft;password=f0rs0ft;SslMode=none;Allow User Variables=True");
         }
 
 

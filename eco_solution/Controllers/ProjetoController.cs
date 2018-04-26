@@ -23,7 +23,7 @@ namespace eco_solution.Controllers
 
             c = new Conexao();
             c.con.Open();
-            c.query = new MySqlCommand("SELECT * FROM projeto", c.con);
+            c.query = new MySqlCommand("SELECT * FROM Projeto", c.con);
             c.rd = c.query.ExecuteReader();
 
             while (c.rd.Read())
@@ -42,6 +42,10 @@ namespace eco_solution.Controllers
             return View(lista);
         }
 
+
+
+
+
         // GET: Projeto/Details/5
         public ActionResult Details(int id)
         {
@@ -51,7 +55,7 @@ namespace eco_solution.Controllers
 
             //Recupera o projeto
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM projeto where IDProjeto = {0}", id), c.con);
+            c.query = new MySqlCommand(String.Format("SELECT * FROM Projeto where IDProjeto = {0}", id), c.con);
             c.rd = c.query.ExecuteReader();
             while (c.rd.Read())
             {
@@ -66,7 +70,7 @@ namespace eco_solution.Controllers
 
             //recupera a pessoa criadora do projeto
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa where IDPessoa = {0}", project.Pessoa.IDPessoa), c.con);
+            c.query = new MySqlCommand(String.Format("SELECT * FROM Pessoa where IDPessoa = {0}", project.Pessoa.IDPessoa), c.con);
             c.rd = c.query.ExecuteReader();
             while (c.rd.Read())
             {
@@ -81,7 +85,7 @@ namespace eco_solution.Controllers
 
             //recupera a pessoa e sua avaliação ligada ao projeto
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("select * from avaliacao inner join pessoa on avaliacao.IDPessoa = pessoa.IDPessoa where IDProjeto = {0}", id, project.IDProjeto), c.con);
+            c.query = new MySqlCommand(String.Format("select * from Avaliacao inner join Pessoa on Avaliacao.IDPessoa = Pessoa.IDPessoa where IDProjeto = {0}", id, project.IDProjeto), c.con);
 
 
             c.rd = c.query.ExecuteReader();
@@ -111,11 +115,19 @@ namespace eco_solution.Controllers
             return View(project);
         }
 
+
+
+
+
         // GET: Projeto/Create
         public ActionResult Create()
         {
             return View();
         }
+
+
+
+
 
         // POST: Projeto/Create
         [HttpPost]
@@ -153,16 +165,16 @@ namespace eco_solution.Controllers
                     c = new Conexao();
                     c.con.Open();
                     c.query = c.con.CreateCommand();
-                    c.query.CommandText = "INSERT INTO projeto (IDPessoa,Nome,Descricao,Imagem) VALUES (@idpessoa,@nome,@descricao,@imagem)";
+                    c.query.CommandText = "INSERT INTO Projeto (IDPessoa,Nome,Descricao,Imagem) VALUES (@idpessoa,@nome,@descricao,@imagem)";
 
                     c.query.Parameters.AddWithValue("@idpessoa", idlogado);
                     c.query.Parameters.AddWithValue("@nome", project.Nome);
                     c.query.Parameters.AddWithValue("@descricao", project.Descricao);
                     c.query.Parameters.AddWithValue("@imagem", project.Imagem);
-
-
-
                     c.query.ExecuteNonQuery();
+
+                    c.con.Close();
+
 
                     return RedirectToAction("Index", "Projeto");
                 }
@@ -174,11 +186,19 @@ namespace eco_solution.Controllers
             return View();
         }
 
+
+
+
+
         // GET: Projeto/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
+
+
+
+
 
         // POST: Projeto/Edit/5
         [HttpPost]
@@ -196,26 +216,27 @@ namespace eco_solution.Controllers
             }
         }
 
-        // GET: Projeto/Delete/5
+
+
+
+
+        // DELETE:  Projeto/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            if(id.Equals(null) || Session["id"].Equals(null))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("Delete from Projeto where IDProjeto = {0}",id),c.con);
+            c.query.ExecuteNonQuery();
+
+            c.con.Close();
+
+            return RedirectToAction("Index", "Perfil");
         }
 
-        // POST: Projeto/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

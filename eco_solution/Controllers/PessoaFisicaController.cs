@@ -22,7 +22,7 @@ namespace eco_solution.Controllers
 
             c = new Conexao();
             c.con.Open();
-            c.query = new MySqlCommand("SELECT * FROM pessoa inner join pessoafisica on IDPessoa = IDPessoaFisica", c.con);
+            c.query = new MySqlCommand("SELECT * FROM Pessoa inner join PessoaFisica on IDPessoa = IDPessoaFisica", c.con);
             c.rd = c.query.ExecuteReader();
 
             while (c.rd.Read())
@@ -58,7 +58,7 @@ namespace eco_solution.Controllers
 
             c = new Conexao();
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa inner join pessoafisica on IDPessoa = IDPessoaFisica where IDPessoa = {0}", id), c.con);
+            c.query = new MySqlCommand(String.Format("SELECT * FROM Pessoa inner join PessoaFisica on IDPessoa = IDPessoaFisica where IDPessoa = {0}", id), c.con);
             c.rd = c.query.ExecuteReader();
 
             while (c.rd.Read())
@@ -105,11 +105,11 @@ namespace eco_solution.Controllers
                     // pega o nome do arquivo
                     var nomeArquivo = Path.GetFileName(foto.FileName);
                     //cria o caminho final da imagem
-                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/perfilfisico/")), nomeArquivo);
+                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/perfil/")), nomeArquivo);
                     //salva a foto no caminho
                     foto.SaveAs(caminho);
                     //imagem da pessoafisica criado recebe o caminho da imagem salva
-                    pf.Pessoa.Imagem = Path.Combine(Url.Content("/assets/perfilfisico/"), nomeArquivo);
+                    pf.Pessoa.Imagem = Path.Combine(Url.Content("/assets/perfil/"), nomeArquivo);
 
 
 
@@ -117,7 +117,7 @@ namespace eco_solution.Controllers
                     c = new Conexao();
                     c.con.Open();
                     c.query = c.con.CreateCommand();
-                    c.query.CommandText = "INSERT INTO pessoa (Email,Senha,Telefone,Nome,Descricao,Imagem) VALUES (@email,@senha,@telefone,@nome,@descricao,@imagem)";
+                    c.query.CommandText = "INSERT INTO Pessoa (Email,Senha,Telefone,Nome,Descricao,Imagem) VALUES (@email,@senha,@telefone,@nome,@descricao,@imagem)";
                     c.query.Parameters.AddWithValue("@email", pf.Pessoa.Email);
                     c.query.Parameters.AddWithValue("@senha", pf.Pessoa.Senha);
                     c.query.Parameters.AddWithValue("@nome", pf.Pessoa.Nome);
@@ -134,7 +134,7 @@ namespace eco_solution.Controllers
 
 
                     c.con.Open();
-                    c.query.CommandText = "INSERT INTO pessoafisica (IDPessoaFisica,RG,CPF) VALUES (@idpessoafisica, @rg, @cpf)";
+                    c.query.CommandText = "INSERT INTO PessoaFisica (IDPessoaFisica,RG,CPF) VALUES (@idpessoafisica, @rg, @cpf)";
                     c.query.Parameters.AddWithValue("@idpessoafisica", pf.Pessoa.IDPessoa);
                     c.query.Parameters.AddWithValue("@rg", pf.RG);
                     c.query.Parameters.AddWithValue("@cpf", pf.CPF);

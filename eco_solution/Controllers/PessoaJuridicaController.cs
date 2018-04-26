@@ -25,7 +25,7 @@ namespace eco_solution.Controllers
 
             c = new Conexao();
             c.con.Open();
-            c.query = new MySqlCommand("SELECT * FROM pessoa inner join pessoajuridica on IDPessoa = IDPessoaJuridica", c.con);
+            c.query = new MySqlCommand("SELECT * FROM Pessoa inner join PessoaJuridica on IDPessoa = IDPessoaJuridica", c.con);
             c.rd = c.query.ExecuteReader();
 
             while (c.rd.Read())
@@ -63,7 +63,7 @@ namespace eco_solution.Controllers
 
             c = new Conexao();
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM pessoa inner join pessoajuridica on IDPessoa = IDPessoaJuridica where IDPessoa = {0}", id), c.con);
+            c.query = new MySqlCommand(String.Format("SELECT * FROM Pessoa inner join PessoaJuridica on IDPessoa = IDPessoaJuridica where IDPessoa = {0}", id), c.con);
             c.rd = c.query.ExecuteReader();
 
             while (c.rd.Read())
@@ -126,7 +126,7 @@ namespace eco_solution.Controllers
                     c = new Conexao();
                     c.con.Open();
                     c.query = c.con.CreateCommand();
-                    c.query.CommandText = "INSERT INTO pessoa (Email,Senha,Telefone,Nome,Descricao,Imagem) VALUES (@email,@senha,@telefone,@nome,@descricao,@imagem)";
+                    c.query.CommandText = "INSERT INTO Pessoa (Email,Senha,Telefone,Nome,Descricao,Imagem) VALUES (@email,@senha,@telefone,@nome,@descricao,@imagem)";
                     c.query.Parameters.AddWithValue("@email", pj.Pessoa.Email);
                     c.query.Parameters.AddWithValue("@senha", pj.Pessoa.Senha);
                     c.query.Parameters.AddWithValue("@nome", pj.Pessoa.Nome);
@@ -143,7 +143,7 @@ namespace eco_solution.Controllers
 
 
                     c.con.Open();
-                    c.query.CommandText = "INSERT INTO pessoajuridica " +
+                    c.query.CommandText = "INSERT INTO PessoaJuridica " +
                                             "(IDPessoaJuridica,RazaoSocial,CNPJ,Logradouro,CEP,Cidade,Bairro,Numero,AreaDeAtuacao,Complemento) " +
                                             "VALUES (@idpessoajuridica, @razaosocial, @cnpj,@logradouro,@cep,@cidade,@bairro,@numero,@areadeatuacao,@complemento)";
 
