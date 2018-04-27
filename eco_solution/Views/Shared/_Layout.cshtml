@@ -65,6 +65,21 @@
     <script src="~/Scripts/js/libras.js"></script>
 
     <script>
+        $("#CEP").focusout(function () {
+            $.ajax({
+                url: 'http://viacep.com.br/ws/' + $(this).val() + '/json/unicode/',
+                dataType: 'json',
+                success: function (resposta) {
+
+                    $("#Logradouro").val(resposta.logradouro);
+                    $("#Bairro").val(resposta.bairro);
+                    $("#Cidade").val(resposta.localidade);
+               
+                }
+            });
+
+        });
+
         var wl = new WebLibras({
             compatibilityMode: true
         });
