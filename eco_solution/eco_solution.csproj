@@ -129,7 +129,7 @@
     <Content Include="Scripts\js\jquery.min.js" />
     <Content Include="Scripts\js\libras.js" />
     <Content Include="Scripts\js\popper.min.js" />
-    <Content Include="Scripts\js\render.js" />
+    <Content Include="Scripts\js\sec.js" />
     <Content Include="Scripts\js\validacao.js" />
     <Content Include="Scripts\js\zoomInOut.js" />
     <Content Include="Content\Site.css" />

@@ -9,13 +9,10 @@
     <link href="~/Content/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/css/navestilo.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/scss/style.scss" rel="stylesheet" type="text/css" />
-
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 
-
 <header>
-
     @{
         if (Session["auth"] == null)
         {
@@ -27,11 +24,8 @@
         }
 
     }
-
 </header>
-
 <body class="acessibilidade">
-
     <div class="container body-content">
         <div class="text-right mr-5 mt-4">
             <button class="btn btn-light" onclick="fonte('d');">A-</button>
@@ -45,26 +39,26 @@
             @RenderBody()
         </main>
 
-
         <hr />
-
     </div>
     <footer class="page-footer font-small stylish-color-dark text-center">
         @{
-        Html.RenderPartial("~/Views/Shared/_footer.cshtml");
+            Html.RenderPartial("~/Views/Shared/_footer.cshtml");
         }
     </footer>
-
     <script src="~/Scripts/js/jquery.min.js"></script>
     <script src="~/Scripts/js/bootstrap.min.js"></script>
     <script src="~/Scripts/js/zoomInOut.js"></script>
     <script src="~/Scripts/js/popper.min.js"></script>
     <script src="~/Scripts/js/validacao.js"></script>
-    <script src="~/Scripts/js/render.js"></script>
+    <script src="~/Scripts/js/sec.js"></script>
     <script src="~/Scripts/js/acessibilidade.js"></script>
     <script src="~/Scripts/js/libras.js"></script>
 
     <script>
+
+
+
         $("#CEP").focusout(function () {
             $.ajax({
                 url: 'http://viacep.com.br/ws/' + $(this).val() + '/json/unicode/',
@@ -74,12 +68,12 @@
                     $("#Logradouro").val(resposta.logradouro);
                     $("#Bairro").val(resposta.bairro);
                     $("#Cidade").val(resposta.localidade);
-               
+
                 }
             });
 
         });
-
+    
         var wl = new WebLibras({
             compatibilityMode: true
         });
