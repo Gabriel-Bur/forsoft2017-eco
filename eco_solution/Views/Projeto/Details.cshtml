@@ -1,10 +1,7 @@
 ﻿@model eco_solution.ModelView.ModelViewProjeto
-
 @{
     ViewBag.Title = "Details";
 }
-
-
 
 <div class="row mb-5 mt-5 col-12">
     <div class="col"></div>
@@ -13,20 +10,15 @@
             <div class="card-header">
                 <h1 class="text-center">@Html.DisplayFor(model => model.Nome) </h1>
             </div>
-
             <div class="card-body">
-
 
                 <div class="card">
                     <a>
                         <img class="card-img-top" src="@Html.DisplayFor(model => model.Imagem)" alt="Uma imagem representando coisas inovadoras">
                     </a>
                 </div>
-
                 <hr>
-
                 <h4 class="card-title text-left">Responsável pelo projeto</h4>
-
                 <div class="media text-muted pt-3">
                     <img alt="#" class="mr-2 rounded" style="width: 50px; height: 50px;" src="@Html.DisplayFor(model => model.Pessoa.Imagem)" data-holder-rendered="true">
                     <div class="media-body pb-3 mb-0 small lh-125">
@@ -36,13 +28,11 @@
                     </div>
                 </div>
                 <hr />
-
                 <h5 class="display-4">Descrição</h5>
-                <p class="card-text text-right">
+                <p class="card-text text-left">
                     @Html.DisplayFor(model => model.Descricao)
                 </p>
                 <hr />
-
                 <h5 class="display-4">Avaliações</h5>
                 <div class="list-group">
                     @foreach (var item in Model.Avaliacoes)
@@ -55,13 +45,15 @@
                             <p class="mb-1">@Html.DisplayFor(modelItem => item.Comentario)</p>
                         </a>
                     }
+                    <hr />
+                    <div class="text-center">
+                        <button class="btn btn-primary btn-sx" type="button" onclick="location.href='@Url.Action("Index", "Avaliacao",new {id = Model.IDProjeto })';">Comentar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col"></div>
-
-
 
     @*
         <p>
@@ -69,4 +61,3 @@
             @Html.ActionLink("Back to List", "Index")
         </p>
     *@
-

@@ -136,7 +136,6 @@ namespace eco_solution.Controllers
             ModelViewPessoaFisica pf = new ModelViewPessoaFisica();
             ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
 
-            /// Tupla
 
 
 
@@ -178,17 +177,15 @@ namespace eco_solution.Controllers
 
 
 
-            if (pf.IDPessoaFisica != null)
+            if (pf.IDPessoaFisica != 0)
             {
-                RedirectToAction("ContaPF", "Perfil");
+                return RedirectToAction("ContaPF", "Perfil");
             }
-            if (pj.IDPessoaJuridica != null)
+            if (pj.IDPessoaJuridica != 0)
             {
 
-                RedirectToAction("ContaPJ", "Perfil");
+                return RedirectToAction("ContaPJ", "Perfil");
             }
-
-
 
 
 
@@ -213,15 +210,25 @@ namespace eco_solution.Controllers
         [HttpGet]
         public ActionResult ContaPF()
         {
-            return View();
+            ModelViewPessoaFisica pf = new ModelViewPessoaFisica();
+            var id = Session["id"];
+
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaFisica where IDPessoaFisica = {0}", id), c.con);
+            c.rd = c.query.ExecuteReader();
+            while (c.rd.Read())
+            {
+                pf.IDPessoaFisica = Convert.ToInt32(c.rd["IDPessoaFIsica"].ToString());
+                pf.CPF = c.rd["CPF"].ToString();
+                pf.RG = c.rd["RG"].ToString();
+            }
+            c.con.Close();
+
+            return View(pf);
         }
 
-        //edita pessoa fisica
-        [HttpPost]
-        public ActionResult ContaPF(ModelViewPessoaFisica pf )
-        {
-            return View();
-        }
+
 
 
 
@@ -236,14 +243,76 @@ namespace eco_solution.Controllers
         [HttpGet]
         public ActionResult ContaPJ()
         {
-            return View();
+            ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
+            var id = Session["id"];
+
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaJuridica where IDPessoaJuridica = {0}", id), c.con);
+            c.rd = c.query.ExecuteReader();
+            while (c.rd.Read())
+            {
+                pj.IDPessoaJuridica = Convert.ToInt32(c.rd["IDPessoaJuridica"].ToString());
+                pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
+                pj.CNPJ = c.rd["CNPJ"].ToString();
+                pj.Logradouro = c.rd["Logradouro"].ToString();
+                pj.CEP = c.rd["CEP"].ToString();
+                pj.Cidade = c.rd["Cidade"].ToString();
+                pj.Bairro = c.rd["Bairro"].ToString();
+                pj.Numero = c.rd["Numero"].ToString();
+                pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
+                pj.Complemento = c.rd["Complemento"].ToString();
+
+            }
+            c.con.Close();
+
+            return View(pj);
         }
 
         //edita pessoa juridica
         [HttpPost]
         public ActionResult ContaPJ(ModelViewPessoaJuridica pj)
         {
-            return View();
+
+
+            try
+            {
+                pj.IDPessoaJuridica = Convert.ToInt32(Session["id"]);
+
+
+                c = new Conexao();
+                c.con.Open();
+                c.query = c.con.CreateCommand();
+                c.query.CommandText = "Update PessoaJuridica set " +
+                "Logradouro=@logradouro," +
+                "CEP=@cep," +
+                "Cidade=@cidade," +
+                "Bairro=@bairro," +
+                "Numero=@numero," +
+                "AreaDeAtuacao=@area," +
+                "Complemento=@complemento" +
+                " where IDPessoaJuridica = @id";
+                c.query.Parameters.AddWithValue("@id", pj.IDPessoaJuridica);
+                c.query.Parameters.AddWithValue("@logradouro", pj.Logradouro);
+                c.query.Parameters.AddWithValue("@cep", pj.CEP);
+                c.query.Parameters.AddWithValue("@cidade", pj.Cidade);
+                c.query.Parameters.AddWithValue("@bairro", pj.Bairro);
+                c.query.Parameters.AddWithValue("@numero", pj.Numero);
+                c.query.Parameters.AddWithValue("@area", pj.AreaDeAtuacao);
+                c.query.Parameters.AddWithValue("@complemento", pj.Complemento);
+                c.query.ExecuteNonQuery();
+                c.con.Close();
+
+
+                return RedirectToAction("Index", "Perfil");
+
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("ContaPJ", "Perfil");
+            }
+
+
         }
 
 
@@ -255,6 +324,7 @@ namespace eco_solution.Controllers
 
 
         // Post: Perfil/Edit/5
+        /// EDIT PERFIl
         [HttpPost]
         public ActionResult Edit(ModelViewPessoa person)
         {
@@ -308,6 +378,7 @@ namespace eco_solution.Controllers
 
 
         // POST: Perfil/Edit/5
+        /// EDIT PERFIl
         [HttpGet]
         public ActionResult Edit(int id)
         {

@@ -32,7 +32,7 @@ namespace eco_solution.ModelView
 
 
         [Required(ErrorMessage = "Descreve com sua palavras o seu projeto")]
-        [StringLength(60, MinimumLength = 5, ErrorMessage = "A descrição do projeto deve conter no minimo 5 e no maximo 60 caracteres")]
+        [StringLength(200, MinimumLength = 5, ErrorMessage = "A descrição do projeto deve conter no minimo 5 e no maximo 200 caracteres")]
         [DataType(DataType.MultilineText)]
         public string Descricao { get; set; }
 

@@ -14,6 +14,7 @@ namespace eco_solution.ModelView
 
         [Required(ErrorMessage = "Digite a Razão Social de sua instituição")]
         [StringLength(60,MinimumLength=3,ErrorMessage ="Razao social deve possuir pelo menos 3 e no maximo 60 caracteres")]
+        [Display(Name = "Razão Social")]
         [DataType(DataType.Text)]
         public string RazaoSocial { get; set; }
 
@@ -36,7 +37,7 @@ namespace eco_solution.ModelView
 
 
         [Required(ErrorMessage = "Digite seu Bairro")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Cidade deve possuir pelo menos 2 e no maximo 50 caracteres")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Bairro deve possuir pelo menos 2 e no maximo 50 caracteres")]
         [DataType(DataType.Text)]
         public string Bairro { get; set; }
 
@@ -54,6 +55,7 @@ namespace eco_solution.ModelView
         [Required(ErrorMessage = "Área de Atuação da instituição")]
         [StringLength(25, MinimumLength = 1, ErrorMessage = "Digite em poucas palavras sua área de atuação")]
         [DataType(DataType.Text)]
+        [Display(Name ="Área de Atuação")]
         public string AreaDeAtuacao { get; set; }
 
         [DataType(DataType.Text)]
