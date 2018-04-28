@@ -20,9 +20,9 @@ namespace eco_solution.Controllers
         // GET: Perfil
         public ActionResult Index()
         {
-            if (Session["id"].Equals(null))
+            if (Session["id"] == null)
             {
-                return View("Index", "Login");
+                return RedirectToAction("Index", "Login");
             }
 
 
@@ -72,6 +72,7 @@ namespace eco_solution.Controllers
             c.con.Close();
 
             return View(pessoa);
+
         }
 
 
@@ -119,6 +120,131 @@ namespace eco_solution.Controllers
         }
 
 
+
+
+
+
+        //Redireciona para Conta PF ou PJ
+        public ActionResult EditConta(int id)
+        {
+            if (Session["id"] == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+
+            ModelViewPessoaFisica pf = new ModelViewPessoaFisica();
+            ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
+
+            /// Tupla
+
+
+
+            ///Pessoa Fisica
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaFisica where IDPessoaFisica = {0}", id), c.con);
+            c.rd = c.query.ExecuteReader();
+            while (c.rd.Read())
+            {
+                pf.IDPessoaFisica = Convert.ToInt32(c.rd["IDPessoaFIsica"].ToString());
+                pf.CPF = c.rd["CPF"].ToString();
+                pf.RG = c.rd["RG"].ToString();
+            }
+            c.con.Close();
+
+
+            ///Pessoa Juridica 
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaJuridica where IDPessoaJuridica = {0}", id), c.con);
+            c.rd = c.query.ExecuteReader();
+            while (c.rd.Read())
+            {
+                pj.IDPessoaJuridica = Convert.ToInt32(c.rd["IDPessoaJuridica"].ToString());
+                pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
+                pj.CNPJ = c.rd["CNPJ"].ToString();
+                pj.Logradouro = c.rd["Logradouro"].ToString();
+                pj.CEP = c.rd["CEP"].ToString();
+                pj.Cidade = c.rd["Cidade"].ToString();
+                pj.Bairro = c.rd["Bairro"].ToString();
+                pj.Numero = c.rd["Numero"].ToString();
+                pj.Complemento = c.rd["Complemento"].ToString();
+                pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
+
+
+            }
+            c.con.Close();
+
+
+
+            if (pf.IDPessoaFisica != null)
+            {
+                RedirectToAction("ContaPF", "Perfil");
+            }
+            if (pj.IDPessoaJuridica != null)
+            {
+
+                RedirectToAction("ContaPJ", "Perfil");
+            }
+
+
+
+
+
+            return RedirectToAction("Index", "Perfil");
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //get pagina EditContaPF
+        [HttpGet]
+        public ActionResult ContaPF()
+        {
+            return View();
+        }
+
+        //edita pessoa fisica
+        [HttpPost]
+        public ActionResult ContaPF(ModelViewPessoaFisica pf )
+        {
+            return View();
+        }
+
+
+
+
+
+
+
+
+
+
+        //get pagina EditContaPJ
+        [HttpGet]
+        public ActionResult ContaPJ()
+        {
+            return View();
+        }
+
+        //edita pessoa juridica
+        [HttpPost]
+        public ActionResult ContaPJ(ModelViewPessoaJuridica pj)
+        {
+            return View();
+        }
 
 
 
@@ -173,7 +299,7 @@ namespace eco_solution.Controllers
                 c.query.ExecuteNonQuery();
                 c.con.Close();
 
-                return RedirectToAction("Index","Perfil");
+                return RedirectToAction("Index", "Perfil");
 
             }
 
@@ -181,17 +307,12 @@ namespace eco_solution.Controllers
         }
 
 
-
-
-
-
-
         // POST: Perfil/Edit/5
         [HttpGet]
         public ActionResult Edit(int id)
         {
 
-            if (Session["id"].Equals(null))
+            if (Session["id"] == null)
             {
                 return RedirectToAction("Index", "Login");
             }

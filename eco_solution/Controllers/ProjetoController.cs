@@ -136,9 +136,9 @@ namespace eco_solution.Controllers
             if (ModelState.IsValid)
             {
                 //se nao tiver logado
-                if (Session["id"].Equals(null))
+                if (Session["id"]==null)
                 {
-
+                    return RedirectToAction("Index", "Login");
                 }
                 //se tiver logado
                 else
@@ -146,14 +146,14 @@ namespace eco_solution.Controllers
                     //recupera o id do usuario 
                     var idlogado = Session["id"];
 
- 
+
                     //pega o objeto imagem do input
                     HttpPostedFileBase foto = Request.Files["Imagem"];
 
                     // pega o nome do arquivo
                     var nomeArquivo = Path.GetFileName(foto.FileName);
                     //cria o caminho final da imagem
-                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/Projeto/")),nomeArquivo);
+                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/Projeto/")), nomeArquivo);
                     //salva a foto no caminho
                     foto.SaveAs(caminho);
                     //imagem do projeto criado recebe o caminho da imagem salva
@@ -193,7 +193,28 @@ namespace eco_solution.Controllers
         // GET: Projeto/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            if (id.Equals(null))
+            {
+                return View("Index", "Login");
+            }
+
+
+            ModelViewProjeto project = new ModelViewProjeto();
+
+            c = new Conexao();
+            c.con.Open();
+            c.query = new MySqlCommand(String.Format("SELECT * FROM Projeto where IDProjeto = {0}", id), c.con);
+            c.rd = c.query.ExecuteReader();
+
+            while (c.rd.Read())
+            {
+                project.IDProjeto = Convert.ToInt32(c.rd["IDProjeto"].ToString());
+                project.Nome = c.rd["Nome"].ToString();
+                project.Descricao = c.rd["Descricao"].ToString();
+                project.Imagem = c.rd["Imagem"].ToString();
+            }
+
+            return View(project);
         }
 
 
@@ -202,18 +223,41 @@ namespace eco_solution.Controllers
 
         // POST: Projeto/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(ModelViewProjeto project)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                //recupera o objeto arquivo
+                HttpPostedFileBase foto = Request.Files["Imagem"];
 
-                return RedirectToAction("Index");
+                // pega o nome do arquivo
+                var nomeArquivo = Path.GetFileName(foto.FileName);
+                //cria o caminho final da imagem
+                var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/projeto/")), nomeArquivo);
+                //salva a foto no caminho
+                foto.SaveAs(caminho);
+                //imagem da pessoafisica criado recebe o caminho da imagem salva
+                project.Imagem = Path.Combine(Url.Content("/assets/projeto/"), nomeArquivo);
+
+
+                c = new Conexao();
+                c.query = c.con.CreateCommand();
+                c.query.CommandText = "Update Projeto set " +
+                                        "Nome=@nome , Descricao=@descricao, Imagem=@imagem " +
+                                        "where IDProjeto = @id";
+
+                c.query.Parameters.AddWithValue("@id", project.IDProjeto);
+                c.query.Parameters.AddWithValue("@nome", project.Nome);
+                c.query.Parameters.AddWithValue("@Descricao", project.Descricao);
+                c.query.Parameters.AddWithValue("@Imagem", project.Imagem);
+
+                return RedirectToAction("Index", "Perfil");
+
             }
-            catch
-            {
-                return View();
-            }
+
+
+            return View();
+
         }
 
 
@@ -223,14 +267,14 @@ namespace eco_solution.Controllers
         // DELETE:  Projeto/Delete/5
         public ActionResult Delete(int id)
         {
-            if(id.Equals(null) || Session["id"].Equals(null))
+            if (id==null || Session["id"]==null)
             {
                 return RedirectToAction("Index", "Login");
             }
-            
+
             c = new Conexao();
             c.con.Open();
-            c.query = new MySqlCommand(String.Format("Delete from Projeto where IDProjeto = {0}",id),c.con);
+            c.query = new MySqlCommand(String.Format("Delete from Projeto where IDProjeto = {0}", id), c.con);
             c.query.ExecuteNonQuery();
 
             c.con.Close();

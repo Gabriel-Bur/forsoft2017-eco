@@ -32,41 +32,48 @@ namespace eco_solution.Controllers
             {
 
                 c = new Conexao();
-
                 string email = Convert.ToString(user.Email);
                 string senha = Convert.ToString(user.Senha);
 
 
+                //////////conexão com o banco
                 c.con.Open();
                 c.query = new MySqlCommand("SELECT * FROM Pessoa", c.con);
                 c.rd = c.query.ExecuteReader();
-
                 while (c.rd.Read())
                 {
                     string e = c.rd["Email"].ToString();
                     string s = c.rd["Senha"].ToString();
-                    if (e == email)
+
+                    ///// Compara o login se esta correto
+                    if (e == email & s == senha)
+
                     {
-                        if (s == senha)
-                        {
-                            HttpContext.Session["auth"] = true;
-                            HttpContext.Session["id"] = c.rd["IDPessoa"];
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else
-                        {
-                        }
+                        //login ok
+                        HttpContext.Session["auth"] = true;
+                        HttpContext.Session["id"] = c.rd["IDPessoa"];
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
                     }
+
                 }
+
                 c.con.Close();
             }
+
+            //caso o login esteja incorreto 
+            ModelState.AddModelError("", "Acesso negado");
+
+
             return View();
         }
 
-        ///sair
+
+
+
+        ///logout
         public ActionResult Sair()
         {
             HttpContext.Session["auth"] = null;

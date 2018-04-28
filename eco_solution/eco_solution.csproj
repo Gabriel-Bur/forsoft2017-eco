@@ -199,6 +199,7 @@
     <Content Include="Views\Projeto\Create.cshtml" />
     <Content Include="Views\Perfil\Index.cshtml" />
     <Content Include="Views\Perfil\Edit.cshtml" />
+    <Content Include="Views\Projeto\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -14,15 +14,13 @@
             </div>
             <div class="card-body text-center">
                 <div class="col-12">
-                    <img src="@Html.DisplayFor(model => model.Imagem)" alt="Foto" />
-
-
+                    <img class="img-fluid" src="@Html.DisplayFor(model => model.Imagem)" alt="Foto" />
                 </div>
 
                 <hr>
                 <a href="@Url.Action("Edit", "Perfil", new { id = Session["id"] })">Editar Perfil</a>
                 |
-                <a href=@Url.Action("EditConta", "Perfil", new { id = Session["id"] })">Editar Conta</a>
+                <a href="@Url.Action("EditConta", "Perfil", new { id = Session["id"] })">Editar Conta</a>
 
                 <hr>
 
@@ -55,7 +53,7 @@
                                 <td>@Html.DisplayFor(i => item.IDProjeto)</td>
                                 <td>@Html.DisplayFor(i => item.Nome)</td>
                                 <td>
-                                    @Html.ActionLink("Editar", "Edit", "ProjetoController") |
+                                    @Html.ActionLink("Editar", "Edit", "Projeto", new { id = item.IDProjeto }, null) |
                                     @Html.ActionLink("Delete", "Delete","Projeto", new{ id = item.IDProjeto},null)
                                 </td>
                             </tr>
