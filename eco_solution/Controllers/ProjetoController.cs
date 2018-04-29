@@ -241,6 +241,7 @@ namespace eco_solution.Controllers
 
 
                 c = new Conexao();
+                c.con.Open();
                 c.query = c.con.CreateCommand();
                 c.query.CommandText = "Update Projeto set " +
                                         "Nome=@nome , Descricao=@descricao, Imagem=@imagem " +
@@ -248,9 +249,9 @@ namespace eco_solution.Controllers
 
                 c.query.Parameters.AddWithValue("@id", project.IDProjeto);
                 c.query.Parameters.AddWithValue("@nome", project.Nome);
-                c.query.Parameters.AddWithValue("@Descricao", project.Descricao);
-                c.query.Parameters.AddWithValue("@Imagem", project.Imagem);
-
+                c.query.Parameters.AddWithValue("@descricao", project.Descricao);
+                c.query.Parameters.AddWithValue("@imagem", project.Imagem);
+                c.query.ExecuteNonQuery();
                 return RedirectToAction("Index", "Perfil");
 
             }
