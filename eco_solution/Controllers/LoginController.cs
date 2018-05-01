@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -70,7 +72,103 @@ namespace eco_solution.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Recuperar()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult Recuperar(ModelViewRecuperarLogin user)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+                    /// fazer select para comparar os emails e saber se existe
+                    c = new Conexao();
+                    c.con.Open();
+                    c.query = c.con.CreateCommand();
+                    c.query.CommandText = "Select * from Pessoa where Email = @email";
+                    c.query.Parameters.AddWithValue("@email", user.Email.ToString());
+                    c.rd = c.query.ExecuteReader();
+
+                    while (c.rd.Read())
+                    {
+                        string email = c.rd["Email"].ToString();
+                        string senha = c.rd["Senha"].ToString();
+
+                        //verifica se o email que o usuário digitou existe no banco
+                        if (email == user.Email.ToString())
+                        {
+                            //envia email de recuperação
+                            enviaSMTP(user.Email.ToString(), senha.ToString());
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Email", "Email não cadastrado.");
+                            return View();
+                        }
+
+
+                    }
+                }
+                catch
+                {
+                    ModelState.AddModelError("Email", "Aconteceu um erro, tente novamente mais tarde.");
+                    return View();
+                }
+
+
+            }
+
+            ModelState.AddModelError("Email", "Digite um Email válido.");
+            return View();
+        }
+
+
+
+        ///envia email 
+        protected Boolean enviaSMTP(string email, string senha)
+        {
+
+
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+
+
+                //smtp
+                smtp.Port = 587;
+                smtp.EnableSsl = true;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential("gabriel.sampaio@al.forsoft.org.br", "ab12cd1995");
+
+
+
+
+
+                //email
+                mail.From = new MailAddress("gabriel.sampaio@al.forsoft.org.br", "Ecossistema de Inovação");
+                mail.To.Add(email);
+                mail.Subject = "Recuperação de Senha";
+                mail.Body = "Sua senha é: " + senha.ToString();
+
+                smtp.Send(mail);
+
+                return true;
+
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
 
         ///logout

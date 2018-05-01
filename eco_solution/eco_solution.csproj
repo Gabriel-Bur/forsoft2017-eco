@@ -173,6 +173,7 @@
     <Compile Include="ModelView\ModelViewPessoaFisica.cs" />
     <Compile Include="ModelView\ModelViewPessoaJuridica.cs" />
     <Compile Include="ModelView\ModelViewProjeto.cs" />
+    <Compile Include="ModelView\ModelViewRecuperarLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +205,7 @@
     <Content Include="Views\Perfil\ContaPF.cshtml" />
     <Content Include="Views\Perfil\ContaPJ.cshtml" />
     <Content Include="Views\Avaliacao\Index.cshtml" />
+    <Content Include="Views\Login\Recuperar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
