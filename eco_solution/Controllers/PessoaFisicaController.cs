@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -98,6 +100,9 @@ namespace eco_solution.Controllers
 
                 try
                 {
+
+
+
                     //pega o objeto imagem do input
                     HttpPostedFileBase foto = Request.Files["Pessoa.Imagem"];
 
@@ -145,21 +150,23 @@ namespace eco_solution.Controllers
 
                     return RedirectToAction("Index", "Home");
 
-                } catch (Exception e){
+                }
+                catch (Exception e)
+                {
                     return View();
                 }
 
 
             }
 
-                return View();
-            }
+            return View();
+        }
 
-            // GET: PessoaFisica/Edit/5
-            public ActionResult Edit(int id)
-            {
-                return View();
-            }
+        // GET: PessoaFisica/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
 
         // POST: PessoaFisica/Edit/5
         [HttpPost]
