@@ -52,6 +52,8 @@ namespace eco_solution.Controllers
             return View(lista);
         }
 
+
+
         // GET: PessoaFisica/Details/5
         public ActionResult Details(int id)
         {

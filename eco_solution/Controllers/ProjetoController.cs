@@ -18,28 +18,72 @@ namespace eco_solution.Controllers
         // GET: Projeto
         public ActionResult Index()
         {
-
-            List<ModelViewProjeto> lista = new List<ModelViewProjeto>();
-
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand("SELECT * FROM Projeto", c.con);
-            c.rd = c.query.ExecuteReader();
-
-            while (c.rd.Read())
+            try
             {
-                ModelViewProjeto project = new ModelViewProjeto();
-                project.IDProjeto = Convert.ToInt32(c.rd["IDProjeto"].ToString());
-                project.Nome = c.rd["Nome"].ToString();
-                project.Descricao = c.rd["Descricao"].ToString();
-                project.Imagem = c.rd["Imagem"].ToString();
+                List<ModelViewProjeto> lista = new List<ModelViewProjeto>();
 
-                lista.Add(project);
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand("SELECT * FROM Projeto", c.con);
+                c.rd = c.query.ExecuteReader();
+
+                while (c.rd.Read())
+                {
+                    ModelViewProjeto project = new ModelViewProjeto();
+                    project.IDProjeto = Convert.ToInt32(c.rd["IDProjeto"].ToString());
+                    project.Nome = c.rd["Nome"].ToString();
+                    project.Descricao = c.rd["Descricao"].ToString();
+                    project.Imagem = c.rd["Imagem"].ToString();
+
+                    lista.Add(project);
+                }
+
+                c.con.Close();
+
+                return View(lista);
+            }
+            catch
+            {
+                return View();
             }
 
-            c.con.Close();
 
-            return View(lista);
+        }
+
+
+
+        //procurar projetos pelo nome
+        [HttpPost]
+        public ActionResult Index(FormCollection f)
+        {
+
+                List<ModelViewProjeto> lista = new List<ModelViewProjeto>();
+
+
+                string nomeprojeto = f.Get("nome-projeto");
+
+                c = new Conexao();
+                c.con.Open();
+                c.query = c.con.CreateCommand();
+                c.query.CommandText = "Select * from Projeto where Nome like @nome";
+                c.query.Parameters.AddWithValue("@nome", String.Format("%{0}%",nomeprojeto.ToString()));
+                c.rd = c.query.ExecuteReader();
+
+                while (c.rd.Read())
+                {
+                    ModelViewProjeto project = new ModelViewProjeto();
+                    project.IDProjeto = Convert.ToInt32(c.rd["IDProjeto"].ToString());
+                    project.Nome = c.rd["Nome"].ToString();
+                    project.Descricao = c.rd["Descricao"].ToString();
+                    project.Imagem = c.rd["Imagem"].ToString();
+
+                    lista.Add(project);
+                }
+
+                return View(lista);
+            
+
+
         }
 
 
@@ -136,7 +180,7 @@ namespace eco_solution.Controllers
             if (ModelState.IsValid)
             {
                 //se nao tiver logado
-                if (Session["id"]==null)
+                if (Session["id"] == null)
                 {
                     return RedirectToAction("Index", "Login");
                 }
@@ -268,7 +312,7 @@ namespace eco_solution.Controllers
         // DELETE:  Projeto/Delete/5
         public ActionResult Delete(int id)
         {
-            if (id==null || Session["id"]==null)
+            if (id == null || Session["id"] == null)
             {
                 return RedirectToAction("Index", "Login");
             }

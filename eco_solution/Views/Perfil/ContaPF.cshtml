@@ -4,38 +4,43 @@
     ViewBag.Title = "ContaPF";
 }
 
-<h2>Editar Conta</h2>
+<div class="card mt-3">
+    <h2 class="card-header">Editar conta</h2>
+    <div class="card-body">
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+        @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.RG, htmlAttributes: new { @class = "control-label col-md-4" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.RG, new { htmlAttributes = new { @disabled = "disabled", @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.RG, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.RG, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.RG, new { htmlAttributes = new { @disabled = "disabled", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.RG, "", new { @class = "text-danger" })
+                </div>
             </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CPF, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CPF, new { htmlAttributes = new { @disabled = "disabled", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CPF, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+}
+        <div class="col-md-offset-2 col-md-10">
+            @Html.ActionLink("Voltar", "Index", "Perfil", new { @class = "btn btn-primary" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CPF, htmlAttributes: new { @class = "control-label col-md-4" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CPF, new { htmlAttributes = new { @disabled = "disabled", @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CPF, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
     </div>
-}
-
-<div>
-    @Html.ActionLink("Voltar", "Index","Perfil", new {@class = "btn btn-primary" })
 </div>
 
 

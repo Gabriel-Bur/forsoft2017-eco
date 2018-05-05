@@ -6,7 +6,7 @@
 
 
 <div class="row col-12 ml-1 mb-5 mt-5">
-    <div class="col-1"></div>
+    <div class="col"></div>
     <div class="col-10">
         <div class="card">
             <div class="card-header">
@@ -16,21 +16,16 @@
                 <div class="col-12">
                     <img class="img-fluid" src="@Html.DisplayFor(model => model.Imagem)" alt="Foto" />
                 </div>
-
                 <hr>
                 <a href="@Url.Action("Edit", "Perfil", new { id = Session["id"] })">Editar Perfil</a>
                 |
                 <a href="@Url.Action("EditConta", "Perfil", new { id = Session["id"] })">Editar Conta</a>
-
                 <hr>
-
 
                 <label>Nome:</label>
                 <h4>@Html.DisplayFor(model => model.Nome)</h4>
-
                 <label>Contato:</label>
                 <h4>@Html.DisplayFor(model => model.Telefone)</h4>
-
                 <hr>
                 <h6 class="display-4">Descrição</h6>
                 <p class="card-text text-center">
@@ -54,7 +49,7 @@
                                 <td>@Html.DisplayFor(i => item.Nome)</td>
                                 <td>
                                     @Html.ActionLink("Editar", "Edit", "Projeto", new { id = item.IDProjeto }, null) |
-                                    @Html.ActionLink("Delete", "Delete","Projeto", new{ id = item.IDProjeto},null)
+                                    @Html.ActionLink("Delete", "Delete", "Projeto", new { id = item.IDProjeto }, null)
                                 </td>
                             </tr>
                         }
@@ -66,4 +61,5 @@
             </div>
         </div>
     </div>
+    <div class="col"></div>
 </div>

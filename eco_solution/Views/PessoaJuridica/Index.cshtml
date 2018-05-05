@@ -9,16 +9,7 @@
 
     @* Barra de Pesquisa*@
     <h1 class="display-4 text-center mb-5 mt-3"> Empresas Inovadoras</h1>
-    <div class="row">
-        <div class="col"></div>
-        <form class="col-8">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Pesquisar" required>
-                <button class="btn btn-default btn-dark bg-primary border-primary" type="submit">Buscar</button>
-            </div>
-        </form>
-        <div class="col"></div>
-    </div>
+
 
 
     <div class="row mt-3 mr-auto ml-auto">
@@ -26,7 +17,7 @@
         {
             <div class="col-sm-7 col-md-6 mb-3 col-lg-4">
                 <div class="card">
-                    <img class="card-img-top" src="@Html.DisplayFor(modelItem => item.Pessoa.Imagem)" alt="Foto do projeto inovador" style="max-width: 400px; height: 200px;">
+                    <img class="card-img-top" src="@Html.DisplayFor(modelItem => item.Pessoa.Imagem)" alt="Foto do projeto inovador" style="max-width: 100%; height: 200px;">
                     <div class="card-body">
                         <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Pessoa.Nome)</h5>
                         <p class="card-text">@Html.DisplayFor(modelItem => item.Pessoa.Descricao)</p>
