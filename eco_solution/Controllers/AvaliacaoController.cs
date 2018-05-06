@@ -1,5 +1,6 @@
 ﻿using eco_solution.DAO;
 using eco_solution.ModelView;
+using eco_solution.Prevent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,24 +17,32 @@ namespace eco_solution.Controllers
 
         // GET: Avaliacao
         [HttpGet]
+        [NoDirect]
         public ActionResult Index(int id)
         {
+            try
+            {
+                if (Session["id"] == null)
+                {
+                    return RedirectToAction("Index", "Login");
 
-            if (Session["id"] == null)
+                }
+
+
+                Session["projeto"] = id;
+
+                return View();
+            }
+            catch
             {
                 return RedirectToAction("Index", "Login");
-
             }
-
-
-            Session["projeto"] = id;
-
-            return View();
         }
 
 
 
         [HttpPost]
+        [NoDirect]
         public ActionResult Index(ModelViewAvaliacao a)
         {
 

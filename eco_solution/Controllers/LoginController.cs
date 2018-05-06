@@ -1,5 +1,6 @@
 ﻿using eco_solution.DAO;
 using eco_solution.ModelView;
+using eco_solution.Prevent;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace eco_solution.Controllers
         // GET: Login
         //pagina login
         [HttpGet]
+        [NoDirect]
         public ActionResult Index()
         {
             return View();
@@ -27,42 +29,53 @@ namespace eco_solution.Controllers
 
         // POST: Login
         //faz a comparação no login e retorna pagina principal
+        [NoDirect]
         [HttpPost]
         public ActionResult Index(ModelViewLogin user)
         {
             if (ModelState.IsValid)
             {
 
-                c = new Conexao();
-                string email = Convert.ToString(user.Email);
-                string senha = Convert.ToString(user.Senha);
-
-
-                //////////conexão com o banco
-                c.con.Open();
-                c.query = new MySqlCommand("SELECT * FROM Pessoa", c.con);
-                c.rd = c.query.ExecuteReader();
-                while (c.rd.Read())
+                try
                 {
-                    string e = c.rd["Email"].ToString();
-                    string s = c.rd["Senha"].ToString();
+                    c = new Conexao();
+                    string email = Convert.ToString(user.Email);
+                    string senha = Convert.ToString(user.Senha);
 
-                    ///// Compara o login se esta correto
-                    if (e == email & s == senha)
 
+                    //////////conexão com o banco
+                    c.con.Open();
+                    c.query = new MySqlCommand("SELECT * FROM Pessoa", c.con);
+                    c.rd = c.query.ExecuteReader();
+                    while (c.rd.Read())
                     {
-                        //login ok
-                        HttpContext.Session["auth"] = true;
-                        HttpContext.Session["id"] = c.rd["IDPessoa"];
-                        return RedirectToAction("Index", "Home");
+                        string e = c.rd["Email"].ToString();
+                        string s = c.rd["Senha"].ToString();
+
+                        ///// Compara o login se esta correto
+                        if (e == email & s == senha)
+                        {
+                            //login ok
+                            HttpContext.Session["auth"] = true;
+                            HttpContext.Session["id"] = c.rd["IDPessoa"];
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                        }
+
                     }
-                    else
-                    {
-                    }
+
+                    c.con.Close();
 
                 }
+                catch
+                {
+                    ModelState.AddModelError("", "Acesso negado");
+                    return View();
+                }
 
-                c.con.Close();
+
             }
 
             //caso o login esteja incorreto 
@@ -73,12 +86,14 @@ namespace eco_solution.Controllers
         }
 
         [HttpGet]
+        [NoDirect]
         public ActionResult Recuperar()
         {
             return View();
         }
 
         [HttpPost]
+        [NoDirect]
         public ActionResult Recuperar(ModelViewRecuperarLogin user)
         {
 
@@ -171,12 +186,20 @@ namespace eco_solution.Controllers
         }
 
 
+        [NoDirect]
         ///logout
         public ActionResult Sair()
         {
-            HttpContext.Session["auth"] = null;
+            try
+            {
+                HttpContext.Session["auth"] = null;
+                return RedirectToAction("Index", "Home");
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
-            return RedirectToAction("Index", "Home");
         }
 
 

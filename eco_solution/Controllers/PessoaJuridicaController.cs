@@ -1,5 +1,6 @@
 ﻿using eco_solution.DAO;
 using eco_solution.ModelView;
+using eco_solution.Prevent;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -16,90 +17,123 @@ namespace eco_solution.Controllers
 
 
         // GET: PessoaJuridica
+        [NoDirect]
         public ActionResult Index()
         {
 
-            //list de PessoaJuridica
-            List<ModelViewPessoaJuridica> lista = new List<ModelViewPessoaJuridica>();
+            try
+            {
+                //list de PessoaJuridica
+                List<ModelViewPessoaJuridica> lista = new List<ModelViewPessoaJuridica>();
 
 
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand("SELECT * FROM Pessoa inner join PessoaJuridica on IDPessoa = IDPessoaJuridica", c.con);
-            c.rd = c.query.ExecuteReader();
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand("SELECT * FROM Pessoa inner join PessoaJuridica on IDPessoa = IDPessoaJuridica", c.con);
+                c.rd = c.query.ExecuteReader();
 
-            while (c.rd.Read())
+                while (c.rd.Read())
+                {
+                    ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
+                    ModelViewPessoa person = new ModelViewPessoa();
+
+
+                    pj.IDPessoaJuridica = Convert.ToInt32(c.rd["IDPessoaJuridica"].ToString());
+                    pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
+                    pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
+
+                    person.Nome = c.rd["Nome"].ToString();
+                    person.Imagem = c.rd["Imagem"].ToString();
+                    person.Descricao = c.rd["Descricao"].ToString();
+                    person.Telefone = c.rd["Telefone"].ToString();
+
+
+
+                    //faz a uniao das informaçoes de pessoaJuridica e Pessoa pra view
+                    pj.Pessoa = person;
+
+                    lista.Add(pj);
+                }
+                c.con.Close();
+
+                return View(lista);
+            }
+            catch
+            {
+                return View(new List<ModelViewPessoaJuridica>());
+            }
+
+
+        }
+
+
+
+
+
+        // GET: PessoaJuridica/Details/5
+        [NoDirect]
+        public ActionResult Details(int id)
+        {
+            try
             {
                 ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
                 ModelViewPessoa person = new ModelViewPessoa();
 
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand(String.Format("SELECT * FROM Pessoa inner join PessoaJuridica on IDPessoa = IDPessoaJuridica where IDPessoa = {0}", id), c.con);
+                c.rd = c.query.ExecuteReader();
 
-                pj.IDPessoaJuridica = Convert.ToInt32(c.rd["IDPessoaJuridica"].ToString());
-                pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
-                pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
+                while (c.rd.Read())
+                {
+                    person.Email = c.rd["Email"].ToString();
+                    person.Telefone = c.rd["Telefone"].ToString();
+                    person.Nome = c.rd["Nome"].ToString();
+                    person.Descricao = c.rd["Descricao"].ToString();
+                    person.Imagem = c.rd["Imagem"].ToString();
 
-                person.Nome = c.rd["Nome"].ToString();
-                person.Imagem = c.rd["Imagem"].ToString();
-                person.Descricao = c.rd["Descricao"].ToString();
-                person.Telefone = c.rd["Telefone"].ToString();
+                    pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
+                    pj.CNPJ = c.rd["CNPJ"].ToString();
+                    pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
+                    pj.Logradouro = c.rd["Logradouro"].ToString();
+                    pj.Bairro = c.rd["Bairro"].ToString();
+                    pj.Numero = c.rd["Numero"].ToString();
+                    pj.Complemento = c.rd["Complemento"].ToString();
+
+                    pj.Pessoa = person;
 
 
 
-                //faz a uniao das informaçoes de pessoaJuridica e Pessoa pra view
-                pj.Pessoa = person;
+                }
+                c.con.Close();
 
-                lista.Add(pj);
+                return View(pj);
             }
-            c.con.Close();
-
-            return View(lista);
-        }
-
-        // GET: PessoaJuridica/Details/5
-        public ActionResult Details(int id)
-        {
-            ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
-            ModelViewPessoa person = new ModelViewPessoa();
-
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM Pessoa inner join PessoaJuridica on IDPessoa = IDPessoaJuridica where IDPessoa = {0}", id), c.con);
-            c.rd = c.query.ExecuteReader();
-
-            while (c.rd.Read())
+            catch
             {
-                person.Email = c.rd["Email"].ToString();
-                person.Telefone = c.rd["Telefone"].ToString();
-                person.Nome = c.rd["Nome"].ToString();
-                person.Descricao = c.rd["Descricao"].ToString();
-                person.Imagem = c.rd["Imagem"].ToString();
-
-                pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
-                pj.CNPJ = c.rd["CNPJ"].ToString();
-                pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
-                pj.Logradouro = c.rd["Logradouro"].ToString();
-                pj.Bairro = c.rd["Bairro"].ToString();
-                pj.Numero = c.rd["Numero"].ToString();
-                pj.Complemento = c.rd["Complemento"].ToString();
-
-                pj.Pessoa = person;
-
-
-
+                return View();
             }
-            c.con.Close();
 
-            return View(pj);
+
         }
+
+
+
+
 
 
         // GET: PessoaJuridica/Create
+        [NoDirect]
         public ActionResult Create()
         {
             return View();
         }
 
+
+
+
         // POST: PessoaJuridica/Create
+        [NoDirect]
         [HttpPost]
         public ActionResult Create(ModelViewPessoaJuridica pj)
         {
@@ -164,22 +198,38 @@ namespace eco_solution.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                catch (Exception e)
+                catch
                 {
-
+                    return View();
                 }
             }
 
             return View();
         }
 
+
+
+
+
+
+
         // GET: PessoaJuridica/Edit/5
+        [NoDirect]
         public ActionResult Edit(int id)
         {
             return View();
         }
 
+
+
+
+
+
+
+
+
         // POST: PessoaJuridica/Edit/5
+        [NoDirect]
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -195,13 +245,22 @@ namespace eco_solution.Controllers
             }
         }
 
+
+
+
         // GET: PessoaJuridica/Delete/5
+        [NoDirect]
         public ActionResult Delete(int id)
         {
             return View();
         }
 
+
+
+
+
         // POST: PessoaJuridica/Delete/5
+        [NoDirect]
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {

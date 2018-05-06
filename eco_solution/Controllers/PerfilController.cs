@@ -1,5 +1,6 @@
 ﻿using eco_solution.DAO;
 using eco_solution.ModelView;
+using eco_solution.Prevent;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -18,60 +19,69 @@ namespace eco_solution.Controllers
 
 
         // GET: Perfil
+        [NoDirect]
         public ActionResult Index()
         {
-            if (Session["id"] == null)
+
+            try
             {
-                return RedirectToAction("Index", "Login");
+                if (Session["id"] == null)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+
+                var id = Session["id"];
+
+                //Pegar perfil do usuario
+
+                ModelViewPessoa pessoa = new ModelViewPessoa();
+
+
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand(String.Format("SELECT * FROM Pessoa where IDPessoa = {0}", id), c.con);
+                c.rd = c.query.ExecuteReader();
+
+                while (c.rd.Read())
+                {
+
+                    pessoa.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
+                    pessoa.Telefone = c.rd["Telefone"].ToString();
+                    pessoa.Nome = c.rd["Nome"].ToString();
+                    pessoa.Imagem = c.rd["Imagem"].ToString();
+                    pessoa.Descricao = c.rd["Descricao"].ToString();
+
+                }
+                c.con.Close();
+
+                ///////////////
+
+
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand(String.Format("SELECT * FROM Projeto where IDPessoa = {0}", id), c.con);
+                c.rd = c.query.ExecuteReader();
+
+                while (c.rd.Read())
+                {
+
+                    ModelViewProjeto projeto = new ModelViewProjeto();
+
+                    projeto.IDProjeto = Convert.ToInt32(c.rd["IDProjeto"].ToString());
+                    projeto.Nome = c.rd["Nome"].ToString();
+
+                    pessoa.Projetos.Add(projeto);
+                }
+
+                c.con.Close();
+
+                return View(pessoa);
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Home");
             }
 
-
-            var id = Session["id"];
-
-            //Pegar perfil do usuario
-
-            ModelViewPessoa pessoa = new ModelViewPessoa();
-
-
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM Pessoa where IDPessoa = {0}", id), c.con);
-            c.rd = c.query.ExecuteReader();
-
-            while (c.rd.Read())
-            {
-
-                pessoa.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
-                pessoa.Telefone = c.rd["Telefone"].ToString();
-                pessoa.Nome = c.rd["Nome"].ToString();
-                pessoa.Imagem = c.rd["Imagem"].ToString();
-                pessoa.Descricao = c.rd["Descricao"].ToString();
-
-            }
-            c.con.Close();
-
-            ///////////////
-
-
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM Projeto where IDPessoa = {0}", id), c.con);
-            c.rd = c.query.ExecuteReader();
-
-            while (c.rd.Read())
-            {
-
-                ModelViewProjeto projeto = new ModelViewProjeto();
-
-                projeto.IDProjeto = Convert.ToInt32(c.rd["IDProjeto"].ToString());
-                projeto.Nome = c.rd["Nome"].ToString();
-
-                pessoa.Projetos.Add(projeto);
-            }
-
-            c.con.Close();
-
-            return View(pessoa);
 
         }
 
@@ -81,9 +91,18 @@ namespace eco_solution.Controllers
 
 
         // GET: Perfil/Details/5
+        [NoDirect]
         public ActionResult Details(int id)
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
         }
 
 
@@ -92,32 +111,23 @@ namespace eco_solution.Controllers
 
 
         // GET: Perfil/Create
+        [NoDirect]
         public ActionResult Create()
-        {
-            return View();
-        }
-
-
-
-
-
-
-
-        // POST: Perfil/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                return View();
             }
             catch
             {
-                return View();
+                return RedirectToAction("Login", "Home");
             }
+
         }
+
+
+
+
 
 
 
@@ -125,72 +135,78 @@ namespace eco_solution.Controllers
 
 
         //Redireciona para Conta PF ou PJ
+        [NoDirect]
         public ActionResult EditConta(int id)
         {
-            if (Session["id"] == null)
+
+            try
             {
-                return RedirectToAction("Index", "Login");
+                if (Session["id"] == null)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+
+
+                ModelViewPessoaFisica pf = new ModelViewPessoaFisica();
+                ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
+
+
+
+
+                ///Pessoa Fisica
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaFisica where IDPessoaFisica = {0}", id), c.con);
+                c.rd = c.query.ExecuteReader();
+                while (c.rd.Read())
+                {
+                    pf.IDPessoaFisica = Convert.ToInt32(c.rd["IDPessoaFIsica"].ToString());
+                    pf.CPF = c.rd["CPF"].ToString();
+                    pf.RG = c.rd["RG"].ToString();
+                }
+                c.con.Close();
+
+
+                ///Pessoa Juridica 
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaJuridica where IDPessoaJuridica = {0}", id), c.con);
+                c.rd = c.query.ExecuteReader();
+                while (c.rd.Read())
+                {
+                    pj.IDPessoaJuridica = Convert.ToInt32(c.rd["IDPessoaJuridica"].ToString());
+                    pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
+                    pj.CNPJ = c.rd["CNPJ"].ToString();
+                    pj.Logradouro = c.rd["Logradouro"].ToString();
+                    pj.CEP = c.rd["CEP"].ToString();
+                    pj.Cidade = c.rd["Cidade"].ToString();
+                    pj.Bairro = c.rd["Bairro"].ToString();
+                    pj.Numero = c.rd["Numero"].ToString();
+                    pj.Complemento = c.rd["Complemento"].ToString();
+                    pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
+                }
+                c.con.Close();
+
+
+                if (pf.IDPessoaFisica != 0)
+                {
+                    return RedirectToAction("ContaPF", "Perfil");
+                }
+                if (pj.IDPessoaJuridica != 0)
+                {
+
+                    return RedirectToAction("ContaPJ", "Perfil");
+                }
+
+
+
+                return RedirectToAction("Index", "Perfil");
             }
 
-
-            ModelViewPessoaFisica pf = new ModelViewPessoaFisica();
-            ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
-
-
-
-
-            ///Pessoa Fisica
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaFisica where IDPessoaFisica = {0}", id), c.con);
-            c.rd = c.query.ExecuteReader();
-            while (c.rd.Read())
+            catch
             {
-                pf.IDPessoaFisica = Convert.ToInt32(c.rd["IDPessoaFIsica"].ToString());
-                pf.CPF = c.rd["CPF"].ToString();
-                pf.RG = c.rd["RG"].ToString();
+                return RedirectToAction("Index", "Home");
             }
-            c.con.Close();
-
-
-            ///Pessoa Juridica 
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaJuridica where IDPessoaJuridica = {0}", id), c.con);
-            c.rd = c.query.ExecuteReader();
-            while (c.rd.Read())
-            {
-                pj.IDPessoaJuridica = Convert.ToInt32(c.rd["IDPessoaJuridica"].ToString());
-                pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
-                pj.CNPJ = c.rd["CNPJ"].ToString();
-                pj.Logradouro = c.rd["Logradouro"].ToString();
-                pj.CEP = c.rd["CEP"].ToString();
-                pj.Cidade = c.rd["Cidade"].ToString();
-                pj.Bairro = c.rd["Bairro"].ToString();
-                pj.Numero = c.rd["Numero"].ToString();
-                pj.Complemento = c.rd["Complemento"].ToString();
-                pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
-
-
-            }
-            c.con.Close();
-
-
-
-            if (pf.IDPessoaFisica != 0)
-            {
-                return RedirectToAction("ContaPF", "Perfil");
-            }
-            if (pj.IDPessoaJuridica != 0)
-            {
-
-                return RedirectToAction("ContaPJ", "Perfil");
-            }
-
-
-
-            return RedirectToAction("Index", "Perfil");
-
         }
 
 
@@ -207,25 +223,35 @@ namespace eco_solution.Controllers
 
 
         //get pagina EditContaPF
+        //nao possui post
         [HttpGet]
+        [NoDirect]
         public ActionResult ContaPF()
         {
-            ModelViewPessoaFisica pf = new ModelViewPessoaFisica();
-            var id = Session["id"];
-
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaFisica where IDPessoaFisica = {0}", id), c.con);
-            c.rd = c.query.ExecuteReader();
-            while (c.rd.Read())
+            try
             {
-                pf.IDPessoaFisica = Convert.ToInt32(c.rd["IDPessoaFIsica"].ToString());
-                pf.CPF = c.rd["CPF"].ToString();
-                pf.RG = c.rd["RG"].ToString();
-            }
-            c.con.Close();
+                ModelViewPessoaFisica pf = new ModelViewPessoaFisica();
+                var id = Session["id"];
 
-            return View(pf);
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaFisica where IDPessoaFisica = {0}", id), c.con);
+                c.rd = c.query.ExecuteReader();
+                while (c.rd.Read())
+                {
+                    pf.IDPessoaFisica = Convert.ToInt32(c.rd["IDPessoaFIsica"].ToString());
+                    pf.CPF = c.rd["CPF"].ToString();
+                    pf.RG = c.rd["RG"].ToString();
+                }
+                c.con.Close();
+
+                return View(pf);
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
         }
 
 
@@ -241,36 +267,46 @@ namespace eco_solution.Controllers
 
         //get pagina EditContaPJ
         [HttpGet]
+        [NoDirect]
         public ActionResult ContaPJ()
         {
-            ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
-            var id = Session["id"];
-
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaJuridica where IDPessoaJuridica = {0}", id), c.con);
-            c.rd = c.query.ExecuteReader();
-            while (c.rd.Read())
+            try
             {
-                pj.IDPessoaJuridica = Convert.ToInt32(c.rd["IDPessoaJuridica"].ToString());
-                pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
-                pj.CNPJ = c.rd["CNPJ"].ToString();
-                pj.Logradouro = c.rd["Logradouro"].ToString();
-                pj.CEP = c.rd["CEP"].ToString();
-                pj.Cidade = c.rd["Cidade"].ToString();
-                pj.Bairro = c.rd["Bairro"].ToString();
-                pj.Numero = c.rd["Numero"].ToString();
-                pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
-                pj.Complemento = c.rd["Complemento"].ToString();
+                ModelViewPessoaJuridica pj = new ModelViewPessoaJuridica();
+                var id = Session["id"];
 
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand(String.Format("SELECT * FROM PessoaJuridica where IDPessoaJuridica = {0}", id), c.con);
+                c.rd = c.query.ExecuteReader();
+                while (c.rd.Read())
+                {
+                    pj.IDPessoaJuridica = Convert.ToInt32(c.rd["IDPessoaJuridica"].ToString());
+                    pj.RazaoSocial = c.rd["RazaoSocial"].ToString();
+                    pj.CNPJ = c.rd["CNPJ"].ToString();
+                    pj.Logradouro = c.rd["Logradouro"].ToString();
+                    pj.CEP = c.rd["CEP"].ToString();
+                    pj.Cidade = c.rd["Cidade"].ToString();
+                    pj.Bairro = c.rd["Bairro"].ToString();
+                    pj.Numero = c.rd["Numero"].ToString();
+                    pj.AreaDeAtuacao = c.rd["AreaDeAtuacao"].ToString();
+                    pj.Complemento = c.rd["Complemento"].ToString();
+
+                }
+                c.con.Close();
+
+                return View(pj);
             }
-            c.con.Close();
+            catch
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
-            return View(pj);
         }
 
         //edita pessoa juridica
         [HttpPost]
+        [NoDirect]
         public ActionResult ContaPJ(ModelViewPessoaJuridica pj)
         {
 
@@ -325,50 +361,60 @@ namespace eco_solution.Controllers
         // Post: Perfil/Edit/5
         /// EDIT PERFIl
         [HttpPost]
+        [NoDirect]
         public ActionResult Edit(ModelViewPessoa person)
         {
             if (ModelState.IsValid)
             {
 
-                //recupera o id do usuario
-                var idlogado = Session["id"];
+                try
+                {                
+                    //recupera o id do usuario
+                    var idlogado = Session["id"];
 
-                //recupera o objeto arquivo
-                HttpPostedFileBase foto = Request.Files["Imagem"];
+                    //recupera o objeto arquivo
+                    HttpPostedFileBase foto = Request.Files["Imagem"];
 
-                // pega o nome do arquivo
-                var nomeArquivo = Path.GetFileName(foto.FileName);
-                //cria o caminho final da imagem
-                var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/perfil/")), nomeArquivo);
-                //salva a foto no caminho
-                foto.SaveAs(caminho);
-                //imagem da pessoafisica criado recebe o caminho da imagem salva
-                person.Imagem = Path.Combine(Url.Content("/assets/perfil/"), nomeArquivo);
+                    // pega o nome do arquivo
+                    var nomeArquivo = Path.GetFileName(foto.FileName);
+                    //cria o caminho final da imagem
+                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/perfil/")), nomeArquivo);
+                    //salva a foto no caminho
+                    foto.SaveAs(caminho);
+                    //imagem da pessoafisica criado recebe o caminho da imagem salva
+                    person.Imagem = Path.Combine(Url.Content("/assets/perfil/"), nomeArquivo);
 
 
-                c = new Conexao();
-                c.con.Open();
-                c.query = c.con.CreateCommand();
-                c.query.CommandText = "Update Pessoa set " +
-                "IDPessoa=@id," +
-                "Email=@email," +
-                "Senha=@senha," +
-                "Telefone=@telefone," +
-                "Nome=@nome," +
-                "Descricao=@descricao," +
-                "Imagem=@imagem" +
-                " where IDPessoa = @id";
-                c.query.Parameters.AddWithValue("@id", Convert.ToInt32(idlogado));
-                c.query.Parameters.AddWithValue("@email", person.Email);
-                c.query.Parameters.AddWithValue("@senha", person.Senha);
-                c.query.Parameters.AddWithValue("@nome", person.Nome);
-                c.query.Parameters.AddWithValue("@telefone", person.Telefone);
-                c.query.Parameters.AddWithValue("@descricao", person.Descricao);
-                c.query.Parameters.AddWithValue("@imagem", person.Imagem);
-                c.query.ExecuteNonQuery();
-                c.con.Close();
+                    c = new Conexao();
+                    c.con.Open();
+                    c.query = c.con.CreateCommand();
+                    c.query.CommandText = "Update Pessoa set " +
+                    "IDPessoa=@id," +
+                    "Email=@email," +
+                    "Senha=@senha," +
+                    "Telefone=@telefone," +
+                    "Nome=@nome," +
+                    "Descricao=@descricao," +
+                    "Imagem=@imagem" +
+                    " where IDPessoa = @id";
+                    c.query.Parameters.AddWithValue("@id", Convert.ToInt32(idlogado));
+                    c.query.Parameters.AddWithValue("@email", person.Email);
+                    c.query.Parameters.AddWithValue("@senha", person.Senha);
+                    c.query.Parameters.AddWithValue("@nome", person.Nome);
+                    c.query.Parameters.AddWithValue("@telefone", person.Telefone);
+                    c.query.Parameters.AddWithValue("@descricao", person.Descricao);
+                    c.query.Parameters.AddWithValue("@imagem", person.Imagem);
+                    c.query.ExecuteNonQuery();
+                    c.con.Close();
 
-                return RedirectToAction("Index", "Perfil");
+                    return RedirectToAction("Index", "Perfil");
+                }
+                catch
+                {
+                    return View();
+                }
+
+
 
             }
 
@@ -379,38 +425,46 @@ namespace eco_solution.Controllers
         // POST: Perfil/Edit/5
         /// EDIT PERFIl
         [HttpGet]
+        [NoDirect]
         public ActionResult Edit(int id)
         {
-
-            if (Session["id"] == null)
+            try
             {
-                return RedirectToAction("Index", "Login");
+                if (Session["id"] == null)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+
+
+                //Pegar perfil do usuario
+                ModelViewPessoa pessoa = new ModelViewPessoa();
+
+
+                c = new Conexao();
+                c.con.Open();
+                c.query = new MySqlCommand(String.Format("SELECT * FROM Pessoa where IDPessoa = {0}", id), c.con);
+                c.rd = c.query.ExecuteReader();
+
+                while (c.rd.Read())
+                {
+                    pessoa.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
+                    pessoa.Telefone = c.rd["Telefone"].ToString();
+                    pessoa.Email = c.rd["Email"].ToString();
+                    pessoa.Nome = c.rd["Nome"].ToString();
+                    pessoa.Imagem = c.rd["Imagem"].ToString();
+                    pessoa.Descricao = c.rd["Descricao"].ToString();
+
+                }
+                c.con.Close();
+
+                return View(pessoa);
+
             }
-
-
-            //Pegar perfil do usuario
-
-            ModelViewPessoa pessoa = new ModelViewPessoa();
-
-
-            c = new Conexao();
-            c.con.Open();
-            c.query = new MySqlCommand(String.Format("SELECT * FROM Pessoa where IDPessoa = {0}", id), c.con);
-            c.rd = c.query.ExecuteReader();
-
-            while (c.rd.Read())
+            catch
             {
-                pessoa.IDPessoa = Convert.ToInt32(c.rd["IDPessoa"].ToString());
-                pessoa.Telefone = c.rd["Telefone"].ToString();
-                pessoa.Email = c.rd["Email"].ToString();
-                pessoa.Nome = c.rd["Nome"].ToString();
-                pessoa.Imagem = c.rd["Imagem"].ToString();
-                pessoa.Descricao = c.rd["Descricao"].ToString();
-
+                return View();
             }
-            c.con.Close();
-
-            return View(pessoa);
+           
         }
 
 
@@ -419,6 +473,7 @@ namespace eco_solution.Controllers
 
 
         // GET: Perfil/Delete/5
+        [NoDirect]
         public ActionResult Delete(int id)
         {
             return View();
