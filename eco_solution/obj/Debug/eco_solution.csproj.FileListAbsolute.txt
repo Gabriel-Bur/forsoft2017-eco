@@ -153,7 +153,6 @@ C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\bin\pt-br\System.Web.Webpage
 C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\bin\pt-br\System.Web.Webpages.Razor.resources.dll
 C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\bin\pt-br\System.Web.Helpers.resources.dll
 C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\bin\pt-br\System.Web.Mvc.resources.dll
-C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\obj\Debug\eco_solution.csprojResolveAssemblyReference.cache
 C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\obj\Debug\eco_solution.csproj.CoreCompileInputs.cache
 C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\obj\Debug\eco_solution.dll
 C:\Users\cx750\Desktop\forsoft2017-eco\eco_solution\obj\Debug\eco_solution.pdb

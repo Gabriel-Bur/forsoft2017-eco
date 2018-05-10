@@ -325,11 +325,11 @@ namespace eco_solution.Controllers
                     // pega o nome do arquivo
                     var nomeArquivo = Path.GetFileName(foto.FileName);
                     //cria o caminho final da imagem
-                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/projeto/")), nomeArquivo);
+                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/Projeto/")), nomeArquivo);
                     //salva a foto no caminho
                     foto.SaveAs(caminho);
                     //imagem da pessoafisica criado recebe o caminho da imagem salva
-                    project.Imagem = Path.Combine(Url.Content("/assets/projeto/"), nomeArquivo);
+                    project.Imagem = Path.Combine(Url.Content("/assets/Projeto/"), nomeArquivo);
 
 
                     c = new Conexao();
