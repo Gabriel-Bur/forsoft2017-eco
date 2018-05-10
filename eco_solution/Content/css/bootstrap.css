@@ -2966,7 +2966,14 @@ tbody.collapse.show {
   padding: 1.25rem; }
 
 .card-title {
-  margin-bottom: 0.75rem; }
+  margin-bottom: 0.75rem; 
+  display: block;
+  width: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+}
 
 .card-subtitle {
   margin-top: -0.375rem;

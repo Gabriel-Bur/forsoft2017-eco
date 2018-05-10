@@ -148,11 +148,11 @@ namespace eco_solution.Controllers
                     // pega o nome do arquivo
                     var nomeArquivo = Path.GetFileName(foto.FileName);
                     //cria o caminho final da imagem
-                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/perfiljuridico/")), nomeArquivo);
+                    var caminho = Path.Combine(Server.MapPath(Url.Content("~/assets/perfil/")), nomeArquivo);
                     //salva a foto no caminho
                     foto.SaveAs(caminho);
                     //imagem da pessoafisica criado recebe o caminho da imagem salva
-                    pj.Pessoa.Imagem = Path.Combine(Url.Content("/assets/perfiljuridico/"), nomeArquivo);
+                    pj.Pessoa.Imagem = Path.Combine(Url.Content("/assets/perfil/"), nomeArquivo);
 
 
 

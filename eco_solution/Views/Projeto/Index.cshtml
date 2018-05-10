@@ -34,7 +34,9 @@
                         <h5 class="card-title">
                             @Html.DisplayFor(modelItem => item.Nome)
                         </h5>
-                        <p class="card-text">@Html.DisplayFor(modelItem => item.Descricao)</p>
+                        <p class="card-text">
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                        </p>
 
                         <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Details", "Projeto", new { id = item.IDProjeto })'">Detalhes</button>
                     </div>
