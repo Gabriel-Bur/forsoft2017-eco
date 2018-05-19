@@ -25,6 +25,6 @@ database={nome do schema(se necessário criar)}
 ```
 
 
-![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+![alt text](https://github.com/Gabriel-Bur/forsoft2017-eco/blob/master/eco_solution/assets/index.PNG)
 
 
