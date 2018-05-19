@@ -4,7 +4,7 @@ Sistema baseado em tecnologia .NET conectar pessoas fisicas e entidades,
 cadastrando projetos que considerem inovadores, permitindo outros usuário avaliarem e comentarem sobre o projeto.
 
 
-### Prerequisites
+### Requisitos
 
 Para rodar é necessário
 
@@ -24,6 +24,9 @@ server={ip do servidor MySql}
 database={nome do schema(se necessário criar)}
 ```
 
+
+
+### Index
 
 ![alt text](https://github.com/Gabriel-Bur/forsoft2017-eco/blob/master/eco_solution/assets/index.PNG)
 
